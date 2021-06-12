@@ -2,6 +2,7 @@
 **.DS_Store
 **__pycache__/
 **.cache/
+**.mypy_cache/
 **.pyc
 /venv/
 .idea
