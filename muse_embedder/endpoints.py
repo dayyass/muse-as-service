@@ -1,3 +1,6 @@
+from typing import Dict, Tuple
+
+import numpy as np
 import tensorflow_hub as hub
 from flask_restful import Resource, reqparse
 
@@ -14,7 +17,9 @@ from muse_embedder.muse_tokenizer.utils import (
 
 
 class Embedder(Resource):
-    """TODO"""
+    """
+    MUSE embedder api resource.
+    """
 
     def __init__(
         self,
@@ -26,7 +31,14 @@ class Embedder(Resource):
 
         self.embedder = hub.load(embedder_url)
 
-    def get(self):
+    def get(self) -> Tuple[Dict[str, np.ndarray], int]:
+        """
+        GET request method.
+
+        :return: embedding and status code.
+        :rtype: Tuple[Dict[str, np.ndarray], int]
+        """
+
         # add sentence argument
         parser = reqparse.RequestParser()
         parser.add_argument("sentence", required=True, type=str)
@@ -39,7 +51,9 @@ class Embedder(Resource):
 
 
 class Tokenizer(Resource):
-    """TODO"""
+    """
+    MUSE tokenizer api resource.
+    """
 
     def __init__(
         self,
@@ -47,7 +61,7 @@ class Tokenizer(Resource):
         save_model_path=".cache/universal-sentence-encoder-multilingual_3.tar",
     ) -> None:
         """
-        Init Embedder class with tfhub muse embedder.
+        Init Tokenizer class with tfhub muse embedder.
         """
 
         # load and unpack model
@@ -63,12 +77,19 @@ class Tokenizer(Resource):
         )
 
     def get(self):
+        """
+        GET request method.
+
+        :return: tokenized sentence and status code.
+        :rtype: Tuple[Dict[str, np.ndarray], int]
+        """
+
         # add sentence argument
         parser = reqparse.RequestParser()
         parser.add_argument("sentence", required=True, type=str)
         args = parser.parse_args()
 
-        # embed
+        # tokenize
         tokenized_sentence = tokenize(
             sentence=args["sentence"],
             tokenizer=self.tokenizer,

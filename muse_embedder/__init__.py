@@ -6,7 +6,7 @@ from muse_embedder.endpoints import Embedder, Tokenizer
 
 def create_app() -> Flask:
     """
-    Creape MUSE Rest Api embedder and muse_tokenizer
+    Creape MUSE RESR API embedder and tokenizer.
 
     :return: flask app
     :rtype: Flask
