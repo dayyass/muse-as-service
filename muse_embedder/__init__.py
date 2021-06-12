@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api
 
 from muse_embedder.endpoints import Embedder, Tokenizer
+from muse_embedder.utils import download_thhub_tar_model, unpack_tar
 
 
 def create_app() -> Flask:
@@ -11,6 +12,7 @@ def create_app() -> Flask:
     :return: flask app
     :rtype: Flask
     """
+
     app = Flask(__name__)
     api = Api(app)
 
@@ -18,3 +20,24 @@ def create_app() -> Flask:
     api.add_resource(Tokenizer, "/tokenize")
 
     return app
+
+
+def download_thhub_model(
+    thhub_model_url: str = "https://tfhub.dev/google/universal-sentence-encoder-multilingual/3",
+    save_model_path: str = ".cache/universal-sentence-encoder-multilingual_3",
+    verbose: bool = True,
+) -> None:
+    """
+    Download tf hub .tar model given URL and unpack it.
+
+    :param str thhub_model_url: tf hub model URL.
+    :param str save_model_path: path to save model.
+    :param bool verbose: verbose.
+    """
+
+    download_thhub_tar_model(
+        thhub_model_url=thhub_model_url,
+        save_model_path=save_model_path,
+        verbose=verbose,
+    )
+    unpack_tar(path=save_model_path + ".tar", remove=True, verbose=verbose)  # hardcode

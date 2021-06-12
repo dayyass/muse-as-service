@@ -1,3 +1,4 @@
+import os
 import tarfile
 from contextlib import closing
 from pathlib import Path
@@ -18,34 +19,51 @@ def get_path_without_extension(path: str) -> Path:
     return path.parent.joinpath(path.stem)  # type: ignore
 
 
-def unpack_tar(path: str) -> None:
+def unpack_tar(path: str, remove: bool = True, verbose: bool = True) -> None:
     """
-    Unpack .tar file given path.
+    Unpack .tar file given path and remove.
 
     :param str path: path to .tar file.
+    :param bool remove: remove .tar after unpack.
+    :param bool verbose: verbose.
     """
 
     path_without_extension = get_path_without_extension(path)
 
     if not path_without_extension.exists():
 
+        if verbose:
+            print("unpacking '.tar' model ...")
+
+        # extract tar
         # https://stackoverflow.com/questions/6086603/statement-with-and-tarfile
         with closing(tarfile.open(path)) as fp:
             fp.extractall(path_without_extension)
 
+        if remove:
+            # remove tar
+            os.remove(path)
 
-def download_thhub_model(
-    thhub_model_url: str,
-    save_model_path: str,
+
+def download_thhub_tar_model(
+    thhub_model_url: str = "https://tfhub.dev/google/universal-sentence-encoder-multilingual/3",
+    save_model_path: str = ".cache/universal-sentence-encoder-multilingual_3",
+    verbose: bool = True,
 ) -> None:
     """
-    Download th hub model given URL.
+    Download tf hub .tar model given URL.
 
     :param str thhub_model_url: tf hub model URL.
     :param str save_model_path: path to save model.
+    :param bool verbose: verbose.
     """
 
+    save_model_path = save_model_path + ".tar"
+
     if not Path(save_model_path).exists():
+
+        if verbose:
+            print("downloading '.tar' model ...")
 
         # download compressed model
         response = requests.get(f"{thhub_model_url}?tf-hub-format=compressed")

@@ -9,27 +9,24 @@ from muse_embedder.muse_tokenizer.tokenizer import (
     parse_saved_model,
     tokenize,
 )
-from muse_embedder.muse_tokenizer.utils import (
-    download_thhub_model,
-    get_path_without_extension,
-    unpack_tar,
-)
 
 
 class Embedder(Resource):
     """
-    MUSE embedder api resource.
+    MUSE Embedder API resource.
     """
 
     def __init__(
         self,
-        embedder_url: str = "https://tfhub.dev/google/universal-sentence-encoder-multilingual/3",
+        model_path: str = ".cache/universal-sentence-encoder-multilingual_3",
     ) -> None:
         """
-        Init Embedder class with tfhub MUSE embedder.
+        Init Embedder class with tfhub downloaded MUSE model.
+
+        :param str model_path: path to downloaded MUSE model.
         """
 
-        self.embedder = hub.load(embedder_url)
+        self.embedder = hub.KerasLayer(model_path)
 
     def get(self) -> Tuple[Dict[str, np.ndarray], int]:
         """
@@ -52,29 +49,20 @@ class Embedder(Resource):
 
 class Tokenizer(Resource):
     """
-    MUSE tokenizer api resource.
+    MUSE Tokenizer API resource.
     """
 
     def __init__(
         self,
-        thhub_model_url="https://tfhub.dev/google/universal-sentence-encoder-multilingual/3",
-        save_model_path=".cache/universal-sentence-encoder-multilingual_3.tar",
+        model_path: str = ".cache/universal-sentence-encoder-multilingual_3",
     ) -> None:
         """
-        Init Tokenizer class with tfhub muse embedder.
+        Init Tokenizer class with tfhub downloaded MUSE model.
+
+        :param str model_path: path to downloaded MUSE model.
         """
 
-        # load and unpack model
-        download_thhub_model(
-            thhub_model_url=thhub_model_url,
-            save_model_path=save_model_path,
-        )
-        unpack_tar(path=save_model_path)
-
-        # get muse_tokenizer
-        self.tokenizer = get_tokenizer_from_saved_model(
-            parse_saved_model(get_path_without_extension(save_model_path))
-        )
+        self.tokenizer = get_tokenizer_from_saved_model(parse_saved_model(model_path))
 
     def get(self):
         """
