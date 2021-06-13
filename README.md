@@ -4,7 +4,7 @@
 
 **MUSE** paper: [link](https://arxiv.org/abs/1907.04307). <br>
 **USE** paper: [link](https://arxiv.org/abs/1803.11175). <br>
-**USE** Visually Explainer article: [link](https://amitness.com/2020/06/universal-sentence-encoder/). <br>
+**USE** Visually Explainer article: [link](https://amitness.com/2020/06/universal-sentence-encoder/).
 
 ### What is MUSE as Service?
 **MUSE as Service"** is REST API for sentence tokenization and embedding using MUSE.<br>
@@ -28,7 +28,8 @@ docker build -t muse_as_service .
 docker run -d -p 5000:5000 --name muse_as_service muse_as_service
 ```
 **NOTE**: you can launch a service without docker using **gunicorn**: `sh ./gunicorn.sh`, or **flask**: `python app.py`, but it is preferable to launch the service inside the docker container.<br>
-**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service): `docker pull dayyass/muse_as_service`<br>
+**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service):<br>
+`docker pull dayyass/muse_as_service`
 
 ### Usage
 After you launch the service, you can tokenize and embed any {*sentence*} using **GET requests** ({*ip*} is the address where the service was launched):
