@@ -26,8 +26,8 @@ pip install -r requirements.txt
 ### Run Service
 To launch a service use a docker container (either locally or on a server):
 ```
-docker build -t muse_as_servece .
-docker run -d -p 5000:5000 --name muse_as_servece muse_as_servece
+docker build -t muse_as_service .
+docker run -d -p 5000:5000 --name muse_as_service muse_as_service
 ```
 **Note**: you can launch a service without docker using **gunicorn**: `sh ./gunicorn.sh`, or **flask**: `python app.py`, but it is preferable to launch the service inside the docker container.<br>
 
