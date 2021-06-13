@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 
 # instal dependencies
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # download MUSE from tfhub
 RUN python -c "from muse_as_service import download_thhub_model; download_thhub_model()"
