@@ -93,3 +93,17 @@ embedding = client.embed(sentence)
 print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
 print(embedding.shape)  # (512,)
 ```
+
+### Citation
+Please use this bibtex if you want to cite this repository in your publications:
+```
+@misc{muse_as_service,
+    author = {Dani El-Ayyass},
+    title = {Multilingual Universal Sentence Encoder REST API},
+    year = {2021},
+    publisher = {GitHub},
+    journal = {GitHub repository},
+    url = {https://github.com/dayyass/muse_as_service}
+    howpublished = {\url{https://github.com/dayyass/muse_as_service}},
+}
+```
