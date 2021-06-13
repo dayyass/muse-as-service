@@ -13,12 +13,24 @@ USE Visually Explainer article: [link](https://amitness.com/2020/06/universal-se
 It is written on *Flask + gunicorn*.<br>
 You can configure *gunicorn* with [*env.list*](env.list) file.
 
-To create service use docker container (either locally or on the server):
+### Installation
+```
+# clone repo
+git clone https://github.com/dayyass/muse_as_service.git
+
+# install dependencies
+cd muse_as_service
+pip install -r requirements.txt
+```
+
+### Run Service
+To launch service use docker container (either locally or on the server):
 ```
 docker build -t muse_as_servece .
 docker run -d --env-file env.list -p 5000:5000 --name muse_as_servece muse_as_servece
 ```
-**Note** *-p* attribute should be equal to variable *PORT* in [*env.list*](env.list).<br>
+**Note**: *-p* attribute should be equal to variable *PORT* in [*env.list*](env.list).<br>
+**Note**: you can launch service without docker using `python app.py`, but it is preferable to launch service inside docker container.<br>
 
 ### Usage
 After you create service, you can tokenize and embed any {*sentence*} using GET requests ({*ip*} is address where service was created):
