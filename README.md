@@ -27,18 +27,57 @@ http://{ip}:5000/tokenize?sentence={sentence}
 http://{ip}:5000/embed?sentence={sentence}
 ```
 
-You can use python **requests** library to work with GET requests:
+You can use python **requests** library to work with GET requests (example [notebook](example/usage_requests.ipynb)):
 ```python3
+import numpy as np
 import requests
 
-ip = "127.0.0.1"
+ip = "localhost"
+port = 5000
+
 sentence = "This is sentence example."
 
 # tokenizer
-response = requests.get(f"http://{ip}:5000/tokenize", params={"sentence": f"{sentence}"})
+response = requests.get(
+    url=f"http://{ip}:{port}/tokenize",
+    params={"sentence": f"{sentence}"},
+)
 tokenized_sentence = response.json()["content"]
 
 # embedder
-response = requests.get(f"http://{ip}:5000/embed", params={"sentence": f"{sentence}"})
-embedding = response.json()["content"]
+response = requests.get(
+    url=f"http://{ip}:{port}/embed",
+    params={"sentence": f"{sentence}"},
+)
+embedding = np.array(response.json()["content"][0])
+
+# results
+print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
+print(embedding.shape)  # (512,)
+```
+
+But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides the user with a simpler interface (example [notebook](example/usage_client.ipynb)):
+```python3
+from muse_as_service import MUSEClient
+
+ip = "localhost"
+port = 5000
+
+sentence = "This is sentence example."
+
+# init client
+client = MUSEClient(
+    ip=ip,
+    port=port,
+)
+
+# tokenizer
+tokenized_sentence = client.tokenize(sentence)
+
+# embedder
+embedding = client.embed(sentence)
+
+# results
+print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
+print(embedding.shape)  # (512,)
 ```
