@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
+from muse_as_service.client import MUSEClient  # noqa: F401
 from muse_as_service.endpoints import Embedder, Tokenizer
 from muse_as_service.utils import download_thhub_tar_model, unpack_tar
 
