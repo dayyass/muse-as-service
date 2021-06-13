@@ -1,5 +1,5 @@
 ### What is MUSE?
-**MUSE** stands for **Multilingual Universal Sentence Encoder** - multilingual extension (16 languages) of **Universal Sentence Encoder** (USE).<br>
+**MUSE** stands for **Multilingual Universal Sentence Encoder** - multilingual extension (16 languages) of **Universal Sentence Encoder** (**USE**).<br>
 **MUSE/USE** models encode sentences into embedding vectors of fixed size.
 
 **MUSE** paper: [link](https://arxiv.org/abs/1907.04307). <br>
@@ -7,9 +7,9 @@
 **USE** Visually Explainer article: [link](https://amitness.com/2020/06/universal-sentence-encoder/). <br>
 
 ### What is MUSE as Service?
-**MUSE as Service"** is REST API for sentence tokenization and embedding using **MUSE**.<br>
+**MUSE as Service"** is REST API for sentence tokenization and embedding using MUSE.<br>
 It is written on **flask + gunicorn**.<br>
-You can configure **gunicorn** with [**gunicorn.conf.py**](gunicorn.conf.py) file.
+You can configure **gunicorn** with [gunicorn.conf.py](gunicorn.conf.py) file.
 
 ### Installation
 ```
@@ -22,7 +22,7 @@ pip install -r requirements.txt
 ```
 
 ### Run Service
-To launch a service use a docker container (either locally or on a server):
+To launch a service use a **docker container** (either locally or on a server):
 ```
 docker build -t muse_as_service .
 docker run -d -p 5000:5000 --name muse_as_service muse_as_service
@@ -31,7 +31,7 @@ docker run -d -p 5000:5000 --name muse_as_service muse_as_service
 **NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service): `docker pull dayyass/muse_as_service`<br>
 
 ### Usage
-After you launch the service, you can tokenize and embed any {*sentence*} using GET requests ({*ip*} is the address where the service was launched):
+After you launch the service, you can tokenize and embed any {*sentence*} using **GET requests** ({*ip*} is the address where the service was launched):
 ```
 http://{ip}:5000/tokenize?sentence={sentence}
 http://{ip}:5000/embed?sentence={sentence}
