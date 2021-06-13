@@ -27,10 +27,9 @@ pip install -r requirements.txt
 To launch a service use a docker container (either locally or on a server):
 ```
 docker build -t muse_as_servece .
-docker run -d --env-file env.list -p 5000:5000 --name muse_as_servece muse_as_servece
+docker run -d -p 5000:5000 --name muse_as_servece muse_as_servece
 ```
-**Note**: *-p* attribute should be equal to variable *PORT* in [*env.list*](env.list).<br>
-**Note**: you can launch a service without docker using `python app.py`, but it is preferable to launch the service inside the docker container.<br>
+**Note**: you can launch a service without docker using **gunicorn**: `sh ./gunicorn.sh`, or **flask**: `python app.py`, but it is preferable to launch the service inside the docker container.<br>
 
 ### Usage
 After you launch the service, you can tokenize and embed any {*sentence*} using GET requests ({*ip*} is the address where the service was launched):
