@@ -1,4 +1,4 @@
-from muse_embedder import create_app, download_thhub_model
+from muse_as_service import create_app, download_thhub_model
 
 app = create_app()
 

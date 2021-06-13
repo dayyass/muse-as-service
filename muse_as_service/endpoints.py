@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow_hub as hub
 from flask_restful import Resource, reqparse
 
-from muse_embedder.muse_tokenizer.tokenizer import (
+from muse_as_service.muse_tokenizer.tokenizer import (
     get_tokenizer_from_saved_model,
     parse_saved_model,
     tokenize,

@@ -11,17 +11,17 @@ USE Visually Explainer article: [link](https://amitness.com/2020/06/universal-se
 ### What is "MUSE as Service"?
 *"MUSE as Service"* is REST API for sentence tokenization and embedding using MUSE.<br>
 It is written on *Flask + gunicorn*.<br>
-You can configure *gunicorn* with [env.list](env.list) file.
+You can configure *gunicorn* with [*env.list*](env.list) file.
 
-To create service use docker container:
+To create service use docker container (either locally or on the server):
 ```
-docker build -t muse_embedder .
-docker run -d --env-file env.list -p 5000:5000 --name muse_embedder muse_embedder
+docker build -t muse_as_servece .
+docker run -d --env-file env.list -p 5000:5000 --name muse_as_servece muse_as_servece
 ```
-**Note** *-p* attribute should be equal to variable *PORT* in [env.list](env.list).<br>
+**Note** *-p* attribute should be equal to variable *PORT* in [*env.list*](env.list).<br>
 
 ### Usage
-After you create service, you can tokenize and embed any {sentence} using GET requests:
+After you create service, you can tokenize and embed any {*sentence*} using GET requests ({*ip*} is address where service was created):
 ```
 http://{ip}:5000/tokenize?sentence={sentence}
 http://{ip}:5000/embed?sentence={sentence}

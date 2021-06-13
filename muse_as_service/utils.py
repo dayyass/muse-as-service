@@ -58,9 +58,10 @@ def download_thhub_tar_model(
     :param bool verbose: verbose.
     """
 
-    save_model_path = save_model_path + ".tar"
-
-    if not Path(save_model_path).exists():
+    if (
+        not Path(save_model_path).exists()
+        and not Path(save_model_path + ".tar").exists()
+    ):
 
         if verbose:
             print("downloading '.tar' model ...")
@@ -73,5 +74,5 @@ def download_thhub_tar_model(
         Path(save_model_path).parent.absolute().mkdir(parents=True, exist_ok=True)
 
         # save compressed model
-        with open(save_model_path, mode="wb") as fp:
+        with open(save_model_path + ".tar", mode="wb") as fp:
             fp.write(response.content)
