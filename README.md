@@ -7,7 +7,7 @@
 **USE** Visually Explainer article: [link](https://amitness.com/2020/06/universal-sentence-encoder/).
 
 ### What is MUSE as Service?
-**MUSE as Service"** is REST API for sentence tokenization and embedding using MUSE.<br>
+**MUSE as Service** is REST API for sentence tokenization and embedding using MUSE.<br>
 It is written on **flask + gunicorn**.<br>
 You can configure **gunicorn** with [gunicorn.conf.py](gunicorn.conf.py) file.
 
