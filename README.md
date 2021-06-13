@@ -27,7 +27,7 @@ http://{ip}:5000/tokenize?sentence={sentence}
 http://{ip}:5000/embed?sentence={sentence}
 ```
 
-You can use python **requests** library to work with GET requests (example [notebook](example/usage_requests.ipynb)):
+You can use python **requests** library to work with GET requests (example [notebook](examples/usage_requests.ipynb)):
 ```python3
 import numpy as np
 import requests
@@ -56,7 +56,7 @@ print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '
 print(embedding.shape)  # (512,)
 ```
 
-But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides the user with a simpler interface (example [notebook](example/usage_client.ipynb)):
+But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides the user with a simpler interface (example [notebook](examples/usage_client.ipynb)):
 ```python3
 from muse_as_service import MUSEClient
 
