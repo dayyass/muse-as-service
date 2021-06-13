@@ -4,4 +4,4 @@ WORKDIR /app
 COPY . .
 RUN pip install -r requirements.txt
 RUN python -c "from muse_as_service import download_thhub_model; download_thhub_model()"
-CMD gunicorn --bind 0.0.0.0:$PORT --workers $WORKERS --threads $THREADS --timeout 0 app:app
+CMD gunicorn --bind 0.0.0.0:$PORT --workers $WORKERS --threads $THREADS --timeout $TIMEOUT app:app
