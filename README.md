@@ -95,7 +95,7 @@ print(embedding.shape)  # (512,)
 
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:
-```
+```bibtex
 @misc{dayyass_muse_as_service,
     author = {El-Ayyass, Dani},
     title = {Multilingual Universal Sentence Encoder REST API},
