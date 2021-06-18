@@ -1,3 +1,7 @@
+![License](https://img.shields.io/github/license/dayyass/muse_as_service)
+![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)
+[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 ### What is MUSE?
 **MUSE** stands for **Multilingual Universal Sentence Encoder** - multilingual extension (16 languages) of **Universal Sentence Encoder** (**USE**).<br>
 **MUSE/USE** models encode sentences into embedding vectors of fixed size.
