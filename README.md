@@ -13,7 +13,6 @@
 ### What is MUSE as Service?
 **MUSE as Service** is REST API for sentence tokenization and embedding using MUSE.<br>
 It is written on **flask + gunicorn**.<br>
-You can configure **gunicorn** with [gunicorn.conf.py](gunicorn.conf.py) file.
 
 ### Installation
 ```
@@ -26,14 +25,22 @@ pip install -r requirements.txt
 ```
 
 ### Run Service
-To launch a service use a **docker container** (either locally or on a server):
+To build a **docker image** with a service run:
 ```
 docker build -t muse_as_service .
-docker run -d -p 5000:5000 --name muse_as_service muse_as_service
 ```
-**NOTE**: you can launch a service without docker using **gunicorn**: `sh ./gunicorn.sh`, or **flask**: `python app.py`, but it is preferable to launch the service inside the docker container.<br>
-**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service):<br>
-`docker pull dayyass/muse_as_service`
+**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service): `docker pull dayyass/muse_as_service`
+
+To launch the service (either locally or on a server) use a **docker container**:
+```
+docker run -d -p {HOST_PORT}:{CONTAINER_PORT} --name muse_as_service muse_as_service
+```
+**NOTE**: `CONTAINER_PORT` should be equal to `PORT` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
+
+You can also launch a service without docker using:
+- *gunicorn*: `./gunicorn.sh` (you can configure **gunicorn** with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
+- *flask*: `python app.py --host {HOST} --port {PORT}` (default `host 0.0.0.0` and `port 5000`)<br>
+But it is preferable to launch the service inside the docker container.
 
 ### Usage
 After you launch the service, you can tokenize and embed any {*sentence*} using **GET requests** ({*ip*} is the address where the service was launched):
@@ -42,7 +49,7 @@ http://{ip}:5000/tokenize?sentence={sentence}
 http://{ip}:5000/embed?sentence={sentence}
 ```
 
-You can use python **requests** library to work with GET requests (example [notebook](examples/usage_requests.ipynb)):
+You can use python **requests** library to work with GET requests (example [notebook](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_requests.ipynb)):
 ```python3
 import numpy as np
 import requests
@@ -71,7 +78,7 @@ print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '
 print(embedding.shape)  # (512,)
 ```
 
-But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides the user with a simpler interface (example [notebook](examples/usage_client.ipynb)):
+But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides a user with a simpler interface (example [notebook](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_client.ipynb)):
 ```python3
 from muse_as_service import MUSEClient
 

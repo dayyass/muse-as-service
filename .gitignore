@@ -1,7 +1,9 @@
-*.ipynb_checkpoints/
 *.DS_Store
-*__pycache__/
-*.cache/
-*.pyc
-/venv/
+*.ipynb_checkpoints
+
+# cache
+*__pycache__
+*.cache
+
+venv
 .idea

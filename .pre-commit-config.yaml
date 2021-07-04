@@ -11,7 +11,11 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v2.3.0
   hooks:
+    - id: check-yaml
+    - id: name-tests-test
+      args: ['--django']
     - id: debug-statements
+    - id: end-of-file-fixer
     - id: trailing-whitespace
     - id: check-docstring-first
     - id: requirements-txt-fixer
