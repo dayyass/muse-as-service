@@ -25,7 +25,7 @@ pip install -r requirements.txt
 ```
 
 ### Run Service
-To build a **docker image** with a service run:
+To build a **docker image** with a service (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file) run:
 ```
 docker build -t muse_as_service .
 ```

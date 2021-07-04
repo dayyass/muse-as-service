@@ -23,5 +23,6 @@ def create_app() -> Flask:
 
     # auth
     app.token = str(uuid.uuid4())
+    print(f" * Token: {app.token}")
 
     return app

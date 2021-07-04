@@ -14,6 +14,4 @@ if __name__ == "__main__":
     download_thhub_model()
 
     # run
-    print(f" * Token: {app.token}")
-
     app.run(host=args.host, port=args.port)
