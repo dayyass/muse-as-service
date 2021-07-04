@@ -1,7 +1,5 @@
-from typing import Any, Dict, Tuple
-
 import tensorflow_hub as hub
-from flask import current_app
+from flask import Response, abort, current_app, jsonify
 from flask_restful import Resource, reqparse
 
 from muse_as_service.muse_tokenizer.tokenizer import (
@@ -9,6 +7,14 @@ from muse_as_service.muse_tokenizer.tokenizer import (
     parse_saved_model,
     tokenize,
 )
+
+
+def unauthorized():
+    return Response(
+        "Access denied! Use token for authorization.",
+        401,
+        {"WWW-Authenticate": 'Basic realm="Login Required"'},
+    )
 
 
 class Embedder(Resource):
@@ -28,12 +34,12 @@ class Embedder(Resource):
 
         self.embedder = hub.KerasLayer(model_path)
 
-    def get(self) -> Tuple[Dict[str, Any], int]:
+    def get(self) -> Response:
         """
         GET request method.
 
         :return: embedding and status code.
-        :rtype: Tuple[Dict[str, Any], int]
+        :rtype: Response
         """
 
         # add sentence argument
@@ -42,14 +48,12 @@ class Embedder(Resource):
         parser.add_argument("sentence", required=True, type=str)
         args = parser.parse_args()
 
-        # auth
         if current_app.token != args.token:
-            return {"content": "Access denied!"}, 401
-
-        # embed
-        embedding = self.embedder(args["sentence"]).numpy().tolist()
-
-        return {"content": embedding}, 200
+            abort(unauthorized())
+        else:
+            embedding = self.embedder(args["sentence"]).numpy().tolist()
+            response = jsonify(embedding=embedding, status_code=200)
+            return response
 
 
 class Tokenizer(Resource):
@@ -74,7 +78,7 @@ class Tokenizer(Resource):
         GET request method.
 
         :return: tokenized sentence and status code.
-        :rtype: Tuple[Dict[str, Any], int]
+        :rtype: Response
         """
 
         # add sentence argument
@@ -83,14 +87,12 @@ class Tokenizer(Resource):
         parser.add_argument("sentence", required=True, type=str)
         args = parser.parse_args()
 
-        # auth
         if current_app.token != args.token:
-            return {"content": "Access denied!"}, 401
-
-        # tokenize
-        tokenized_sentence = tokenize(
-            sentence=args["sentence"],
-            tokenizer=self.tokenizer,
-        )
-
-        return {"content": tokenized_sentence}, 200
+            abort(unauthorized())
+        else:
+            tokenized_sentence = tokenize(
+                sentence=args["sentence"],
+                tokenizer=self.tokenizer,
+            )
+            response = jsonify(tokens=tokenized_sentence, status_code=200)
+            return response
