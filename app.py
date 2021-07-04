@@ -9,6 +9,10 @@ if __name__ == "__main__":
     parser = get_argparse()
     args = parser.parse_args()
 
-    # run
+    # load model
     download_thhub_model()
+
+    # run
+    print(f" * Token: {app.token}")
+
     app.run(host=args.host, port=args.port)
