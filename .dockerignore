@@ -1,8 +1,11 @@
+**.DS_Store
 **.ipynb_checkpoints
+
+# cache
 **__pycache__
 **.mypy_cache
 **.cache
-**.DS_Store
+
 venv
 .idea
 .git
