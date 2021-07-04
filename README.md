@@ -30,7 +30,10 @@ To build a **docker image** with a service (parametrized with [gunicorn.conf.py]
 ```
 docker build -t muse_as_service .
 ```
-**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service): `docker pull dayyass/muse_as_service`
+**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service):
+```
+docker pull dayyass/muse_as_service
+```
 
 To launch the service (either locally or on a server) use a **docker container**:
 ```
