@@ -56,22 +56,27 @@ import requests
 
 ip = "localhost"
 port = 5000
+token = "TOKEN"
+
+url_service = f"http://{ip}:{port}"
+url_tokenize = f"{url_service}/tokenize"
+url_embed = f"{url_service}/embed"
 
 sentence = "This is sentence example."
 
 # tokenizer
 response = requests.get(
-    url=f"http://{ip}:{port}/tokenize",
-    params={"sentence": f"{sentence}"},
+    url=url_tokenize,
+    params={"token": token, "sentence": sentence},
 )
-tokenized_sentence = response.json()["content"]
+tokenized_sentence = response.json()["tokens"]
 
 # embedder
 response = requests.get(
-    url=f"http://{ip}:{port}/embed",
-    params={"sentence": f"{sentence}"},
+    url=url_embed,
+    params={"token": token, "sentence": sentence},
 )
-embedding = np.array(response.json()["content"][0])
+embedding = np.array(response.json()["embedding"][0])
 
 # results
 print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
@@ -84,6 +89,7 @@ from muse_as_service import MUSEClient
 
 ip = "localhost"
 port = 5000
+token = "TOKEN"
 
 sentence = "This is sentence example."
 
@@ -91,6 +97,7 @@ sentence = "This is sentence example."
 client = MUSEClient(
     ip=ip,
     port=port,
+    token=token,
 )
 
 # tokenizer

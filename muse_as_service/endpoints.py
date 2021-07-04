@@ -52,8 +52,7 @@ class Embedder(Resource):
             abort(unauthorized())
         else:
             embedding = self.embedder(args["sentence"]).numpy().tolist()
-            response = jsonify(embedding=embedding, status_code=200)
-            return response
+            return jsonify(embedding=embedding)
 
 
 class Tokenizer(Resource):
@@ -94,5 +93,4 @@ class Tokenizer(Resource):
                 sentence=args["sentence"],
                 tokenizer=self.tokenizer,
             )
-            response = jsonify(tokens=tokenized_sentence, status_code=200)
-            return response
+            return jsonify(tokens=tokenized_sentence)
