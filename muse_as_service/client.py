@@ -12,7 +12,7 @@ class MUSEClient:
 
     def __init__(self, token: str, ip: str = "localhost", port: int = 5000) -> None:
         """
-        Init MUSEClient with ip and port.
+        Init MUSEClient with token, ip and port.
 
         :param str token: token for authorization.
         :param str ip: address where service was created (default: "localhost").
@@ -38,7 +38,7 @@ class MUSEClient:
 
         response = requests.get(
             url=self.url_tokenize,
-            params={"token": self.token, "sentence": sentence},
+            params={"token": self.token, "sentence": f"{sentence}"},
         )
 
         if response.status_code != 200:
@@ -57,7 +57,7 @@ class MUSEClient:
 
         response = requests.get(
             url=self.url_embed,
-            params={"token": self.token, "sentence": sentence},
+            params={"token": self.token, "sentence": f"{sentence}"},
         )
 
         if response.status_code != 200:
