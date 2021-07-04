@@ -25,19 +25,22 @@ pip install -r requirements.txt
 ```
 
 ### Run Service
-To launch a service use a **docker container** (either locally or on a server):
+To build a **docker image** with a service run:
 ```
 docker build -t muse_as_service .
-docker run -d -p 5000:5000 --name muse_as_service muse_as_service
 ```
+**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service): `docker pull dayyass/muse_as_service`
+
+To launch the service (either locally or on a server) use a **docker container**:
+```
+docker run -d -p {HOST_PORT}:{CONTAINER_PORT} --name muse_as_service muse_as_service
+```
+**NOTE**: `CONTAINER_PORT` should be equal to `PORT` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
 
 You can also launch a service without docker using:
 - *gunicorn*: `./gunicorn.sh` (you can configure **gunicorn** with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
-- *flask*: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)<br>
+- *flask*: `python app.py --host {HOST} --port {PORT}` (default `host 0.0.0.0` and `port 5000`)<br>
 But it is preferable to launch the service inside the docker container.
-
-**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service):<br>
-`docker pull dayyass/muse_as_service`
 
 ### Usage
 After you launch the service, you can tokenize and embed any {*sentence*} using **GET requests** ({*ip*} is the address where the service was launched):
