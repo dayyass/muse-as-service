@@ -22,7 +22,8 @@ def create_app() -> Flask:
         api.add_resource(Tokenizer, "/tokenize")
 
     # auth
-    app.token = str(uuid.uuid4())
-    print(f" * Token: {app.token}")
+    if not hasattr(app, "token"):
+        app.token = str(uuid.uuid4())
+        print(f" * Token: {app.token}")
 
     return app

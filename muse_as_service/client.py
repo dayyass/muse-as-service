@@ -40,7 +40,11 @@ class MUSEClient:
             url=self.url_tokenize,
             params={"token": self.token, "sentence": sentence},
         )
-        return response.json()["tokens"]
+
+        if response.status_code != 200:
+            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+        else:
+            return response.json()["tokens"]
 
     def embed(self, sentence: str) -> np.ndarray:
         """
@@ -55,4 +59,8 @@ class MUSEClient:
             url=self.url_embed,
             params={"token": self.token, "sentence": sentence},
         )
-        return np.array(response.json()["embedding"][0])
+
+        if response.status_code != 200:
+            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+        else:
+            return np.array(response.json()["embedding"][0])
