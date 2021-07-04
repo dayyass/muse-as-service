@@ -1,4 +1,4 @@
-from muse_as_service import create_app, get_argparse, download_thhub_model
+from muse_as_service import create_app, download_thhub_model, get_argparse
 
 app = create_app()
 
