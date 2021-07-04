@@ -33,7 +33,7 @@ docker run -d -p 5000:5000 --name muse_as_service muse_as_service
 
 You can also launch a service without docker using:
 - *gunicorn*: `./gunicorn.sh` (you can configure **gunicorn** with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
-- *flask*: `python app.py --host {host} --port {port}`<br>
+- *flask*: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)<br>
 But it is preferable to launch the service inside the docker container.
 
 **NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service):<br>
