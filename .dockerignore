@@ -6,6 +6,10 @@
 **.mypy_cache
 **.cache
 
+# coverage
+**.coverage
+**coverage.xml
+
 venv
 .idea
 .git

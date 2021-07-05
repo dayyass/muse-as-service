@@ -147,6 +147,9 @@ To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
+To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
+`coverage run -m unittest discover && coverage report -m`
+
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:
 ```bibtex

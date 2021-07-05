@@ -1,3 +1,4 @@
+coverage==5.5
 Flask==2.0.1
 Flask-RESTful==0.3.9
 Flask-Testing==0.8.1

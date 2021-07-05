@@ -1,0 +1,17 @@
+[run]
+branch = True
+source = muse_as_service
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if self\.debug
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+
+omit =
+    muse_as_service/utils.py
+
+show_missing = True
+ignore_errors = False
