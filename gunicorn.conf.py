@@ -20,12 +20,11 @@ PORT = 5000
 # GUNICORN OPTIONS
 
 bind = f"{HOST}:{PORT}"  # The socket to bind
-workers = (  # The number of worker processes for handling requests
-    max_workers_and_threads()
-)
-threads = (  # The number of worker threads for handling requests
-    max_workers_and_threads()
+workers = 4  # The number of worker processes for handling requests
+threads = min(  # The number of worker threads for handling requests
+    8, max_workers_and_threads()
 )
 timeout = 0  # Workers silent for more than this many seconds are killed and restarted
 
-# You can also add other gunicorn options
+# You can also add other gunicorn options:
+# https://docs.gunicorn.org/en/stable/configure.html#configuration-file
