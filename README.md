@@ -138,6 +138,13 @@ print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '
 print(embedding.shape)  # (512,)
 ```
 
+### Tests
+To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
+`python -m unittest discover`
+
+To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
+`pre-commit install`
+
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:
 ```bibtex
