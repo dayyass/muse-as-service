@@ -24,36 +24,42 @@ class MUSEClient:
         self.token = token
 
         self.url_service = f"http://{self.ip}:{self.port}"
-        self.url_tokenize = f"{self.url_service}/tokenize"
-        self.url_embed = f"{self.url_service}/embed"
 
-    def _tokenizer(self, sentence: str) -> requests.Response:
+    def _tokenize_url(self, sentence: str) -> str:
         """
-        HTTP GET request to tokenizer.
+        HTTP GET url for tokenization.
 
         :param str sentence: sentence for tokenization.
-        :return: HTTP GET response
-        :rtype: requests.Response
+        :return: HTTP GET url
+        :rtype: str
         """
 
-        return requests.get(
-            url=self.url_tokenize,
+        request = requests.Request(
+            method="GET",
+            url=f"{self.url_service}/tokenize",
             params={"token": self.token, "sentence": f"{sentence}"},
         )
+        url = request.prepare().url
 
-    def _embedder(self, sentence: str) -> requests.Response:
+        return url  # type: ignore
+
+    def _embed_url(self, sentence: str) -> str:
         """
-        HTTP GET request to embedder.
+        HTTP GET url for embedding.
 
         :param str sentence: sentence for embedding.
-        :return: HTTP GET response
-        :rtype: requests.Response
+        :return: HTTP GET url
+        :rtype: str
         """
 
-        return requests.get(
-            url=self.url_embed,
+        request = requests.Request(
+            method="GET",
+            url=f"{self.url_service}/embed",
             params={"token": self.token, "sentence": f"{sentence}"},
         )
+        url = request.prepare().url
+
+        return url  # type: ignore
 
     def tokenize(self, sentence: str) -> List[str]:
         """
@@ -64,7 +70,7 @@ class MUSEClient:
         :rtype: List[str]
         """
 
-        response = self._tokenizer(sentence)
+        response = requests.get(self._tokenize_url(sentence))
 
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
@@ -80,7 +86,7 @@ class MUSEClient:
         :rtype: np.ndarray
         """
 
-        response = self._embedder(sentence)
+        response = requests.get(self._embed_url(sentence))
 
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")

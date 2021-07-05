@@ -54,15 +54,15 @@ class TestUsage(flask_testing.TestCase):
         )
 
         # tokenizer
-        client_response = client._tokenizer(sentence)
-        query_string = dict(parse.parse_qsl(parse.urlsplit(client_response.url).query))
+        tokenize_url = client._tokenize_url(sentence)
+        query_string = dict(parse.parse_qsl(parse.urlsplit(tokenize_url).query))
 
         response = self.client.get("/tokenize", query_string=query_string)
         tokenized_sentence = response.json["tokens"]
 
         # embedder
-        client_response = client._embedder(sentence)
-        query_string = dict(parse.parse_qsl(parse.urlsplit(client_response.url).query))
+        embed_url = client._embed_url(sentence)
+        query_string = dict(parse.parse_qsl(parse.urlsplit(embed_url).query))
 
         response = self.client.get("/embed", query_string=query_string)
         embedding = np.array(response.json["embedding"][0])
