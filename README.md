@@ -1,7 +1,9 @@
+[![tests](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml)
 [![linter](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml)
-[![license](https://img.shields.io/github/license/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/dayyass/muse_as_service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse_as_service)
+[![license](https://img.shields.io/github/license/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
 [![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/releases/latest)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/dayyass/muse_as_service/blob/master/.pre-commit-config.yaml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### What is MUSE?
@@ -28,11 +30,12 @@ This is why **MUSE as Service** was made!
 
 ### Installation
 ```
-# clone repo
+# clone repo (https/ssh)
 git clone https://github.com/dayyass/muse_as_service.git
+# git clone git@github.com:dayyass/muse_as_service.git
 
-# install dependencies
-cd muse_as_service
+# install dependencies (preferable in venv)
+cd calculus_of_variations
 pip install -r requirements.txt
 ```
 
@@ -137,6 +140,16 @@ embedding = client.embed(sentence)
 print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
 print(embedding.shape)  # (512,)
 ```
+
+### Tests
+To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
+`python -m unittest discover`
+
+To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
+`pre-commit install`
+
+To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
+`coverage run -m unittest discover && coverage report -m`
 
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:
