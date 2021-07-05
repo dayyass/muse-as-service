@@ -65,19 +65,23 @@ http://{ip}:{port}/embed?token={token}&sentence={sentence}
 ```
 **NOTE**: in all examples of using the service, *token authentication* is used.
 
-You can use python **requests** library to work with GET requests (example [notebook](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_requests.ipynb)):
+You can use python **requests** library to work with GET requests (example [script](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_requests.py)):
 ```python3
+import os
+
 import numpy as np
 import requests
 
-ip = "localhost"
-port = 5000
-token = "TOKEN"
+# params
+ip = os.environ["IP"]
+port = int(os.environ["PORT"])
+token = os.environ["TOKEN"]
 
 url_service = f"http://{ip}:{port}"
 url_tokenize = f"{url_service}/tokenize"
 url_embed = f"{url_service}/embed"
 
+# sentence
 sentence = "This is sentence example."
 
 # tokenizer
@@ -99,14 +103,21 @@ print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '
 print(embedding.shape)  # (512,)
 ```
 
-But it is better to use the built-in client [**MUSEClient**](https://github.com/dayyass/muse_as_service/blob/main/muse_as_service/client.py) for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides a user with a simpler interface (example [notebook](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_client.ipynb)):
+But it is better to use the built-in client [**MUSEClient**](https://github.com/dayyass/muse_as_service/blob/main/muse_as_service/client.py) for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides a user with a simpler interface (example [script](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_client.py)):
 ```python3
-from muse_as_service import MUSEClient
+import os
+import sys
 
-ip = "localhost"
-port = 5000
-token = "TOKEN"
+sys.path.append("../muse_as_service")
 
+from muse_as_service import MUSEClient  # noqa: E402
+
+# params
+ip = os.environ["IP"]
+port = int(os.environ["PORT"])
+token = os.environ["TOKEN"]
+
+# sentence
 sentence = "This is sentence example."
 
 # init client
