@@ -1,3 +1,4 @@
+[![tests](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml)
 [![linter](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml)
 [![license](https://img.shields.io/github/license/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/blob/master/LICENSE)
 [![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/releases/latest)
@@ -28,11 +29,12 @@ This is why **MUSE as Service** was made!
 
 ### Installation
 ```
-# clone repo
+# clone repo (https/ssh)
 git clone https://github.com/dayyass/muse_as_service.git
+# git clone git@github.com:dayyass/muse_as_service.git
 
-# install dependencies
-cd muse_as_service
+# install dependencies (preferable in venv)
+cd calculus_of_variations
 pip install -r requirements.txt
 ```
 
