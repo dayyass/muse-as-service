@@ -12,8 +12,19 @@ MUSE/USE models encode sentences into embedding vectors of fixed size.
 - *USE* paper: [link](https://arxiv.org/abs/1803.11175).
 
 ### What is MUSE as Service?
-**MUSE as Service** is REST API for sentence tokenization and embedding using MUSE.<br>
-It is written on *flask + gunicorn*.<br>
+**MUSE as Service** is REST API for sentence tokenization and embedding using MUSE from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3).<br>
+It is written with *flask* + *gunicorn* = ❤️.<br>
+
+### Why I need it?
+MUSE from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3) requires to be installed:
+- *tensorflow*
+- *tensorflow-hub*
+- *tensorflow-text*
+
+These libraries take up more than **1GB** of memory. The model itself takes up **280MB** of memory.
+
+For efficient memory usage when working with *MUSE* on several projects (several virtual environments) and with teammates (several model copies on different computers) it is better to deploy one instance of model with one virtual environment where all teammates have access to.<br>
+This is why **MUSE as Service** was made!
 
 ### Installation
 ```
