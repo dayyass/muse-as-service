@@ -35,8 +35,8 @@ git clone https://github.com/dayyass/muse_as_service.git
 # git clone git@github.com:dayyass/muse_as_service.git
 
 # install dependencies (preferable in venv)
-cd calculus_of_variations
-pip install -r requirements.txt
+cd muse_as_service
+pip install --upgrade pip && pip install -r requirements.txt
 ```
 
 ### Run Service
