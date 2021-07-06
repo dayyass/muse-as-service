@@ -80,15 +80,13 @@ http://{ip}:{port}/embed?token={token}&sentence={sentence_1}&sentence={sentence_
 
 You can use python **requests** package to work with HTTP GET requests:
 ```python3
-import os
-
 import numpy as np
 import requests
 
 # params
-ip = os.environ["IP"]
-port = int(os.environ["PORT"])
-token = os.environ["TOKEN"]
+ip = "localhost"
+port = 5000
+token = "TOKEN"
 
 url_service = f"http://{ip}:{port}"
 url_tokenize = f"{url_service}/tokenize"
@@ -121,14 +119,12 @@ print(embedding.shape)  # (2, 512)
 
 But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface:
 ```python3
-import os
-
 from muse_as_service import MUSEClient
 
 # params
-ip = os.environ["IP"]
-port = int(os.environ["PORT"])
-token = os.environ["TOKEN"]
+ip = "localhost"
+port = 5000
+token = "TOKEN"
 
 # sentences
 sentences = ["This is sentence example.", "This is yet another sentence example."]
