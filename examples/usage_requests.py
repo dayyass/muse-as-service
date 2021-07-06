@@ -30,9 +30,10 @@ response = requests.get(
 embedding = np.array(response.json()["embedding"])
 
 # results
-print(
-    tokenized_sentence
-)  # [["▁This", "▁is", "▁sentence", "▁example", "."], ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."]]
+print(tokenized_sentence)  # [
+# ["▁This", "▁is", "▁sentence", "▁example", "."],
+# ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."]
+# ]
 print(embedding.shape)  # (2, 512)
 
 

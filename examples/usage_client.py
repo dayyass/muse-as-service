@@ -27,9 +27,10 @@ tokenized_sentence = client.tokenize(sentences)
 embedding = client.embed(sentences)
 
 # results
-print(
-    tokenized_sentence
-)  # [["▁This", "▁is", "▁sentence", "▁example", "."], ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."]]
+print(tokenized_sentence)  # [
+# ["▁This", "▁is", "▁sentence", "▁example", "."],
+# ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."]
+# ]
 print(embedding.shape)  # (2, 512)
 
 
