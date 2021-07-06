@@ -80,7 +80,7 @@ class Tokenizer(Resource):
 
         self.tokenizer = get_tokenizer_from_saved_model(parse_saved_model(model_path))
 
-    def get(self):
+    def get(self) -> Response:
         """
         GET request method.
 
