@@ -122,9 +122,6 @@ print(embedding.shape)  # (2, 512)
 But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface:
 ```python3
 import os
-import sys
-
-sys.path.append("../muse_as_service")
 
 from muse_as_service import MUSEClient  # noqa: E402
 
