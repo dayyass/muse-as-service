@@ -123,7 +123,7 @@ But it is better to use the built-in client **MUSEClient** for sentence tokeniza
 ```python3
 import os
 
-from muse_as_service import MUSEClient  # noqa: E402
+from muse_as_service import MUSEClient
 
 # params
 ip = os.environ["IP"]
