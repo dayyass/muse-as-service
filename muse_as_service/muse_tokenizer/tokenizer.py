@@ -40,24 +40,29 @@ def get_tokenizer_from_saved_model(saved_model: SavedModel) -> SentencepieceToke
 
 
 def tokenize(
-    sentence: str, tokenizer: SentencepieceTokenizer, encoding: str = "utf-8"
-) -> List[str]:
+    sentences: List[str], tokenizer: SentencepieceTokenizer, encoding: str = "utf-8"
+) -> List[List[str]]:
     """
     Tokenize sentence given muse_tokenizer.
 
-    :param str sentence: sentence to tokenize.
+    :param List[str] sentences: sentences to tokenize.
     :param SentencepieceTokenizer tokenizer: muse_tokenizer.
     :param str encoding: encoding (default: "utf-8").
-    :return: tokenized sentence.
-    :rtype: List[str]
+    :return: tokenized sentences.
+    :rtype: List[List[str]]
     """
 
-    tokenized_sentence = []
+    tokenized_sentences_list = []
 
-    token_ids = tokenizer.tokenize(sentence).numpy()
-    for token_id in token_ids:
-        bytes_token = tokenizer.id_to_string(token_id).numpy()
-        token = bytes_token.decode(encoding)
-        tokenized_sentence.append(token)
+    for sentence in sentences:
+        tokenized_sentence = []
 
-    return tokenized_sentence
+        token_ids = tokenizer.tokenize(sentence).numpy()
+        for token_id in token_ids:
+            bytes_token = tokenizer.id_to_string(token_id).numpy()
+            token = bytes_token.decode(encoding)
+            tokenized_sentence.append(token)
+
+        tokenized_sentences_list.append(tokenized_sentence)
+
+    return tokenized_sentences_list
