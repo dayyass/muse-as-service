@@ -7,26 +7,27 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### What is MUSE?
-**MUSE** stands for *Multilingual Universal Sentence Encoder* - multilingual extension (16 languages) of *Universal Sentence Encoder* (USE).<br>
-MUSE/USE models encode sentences into embedding vectors of fixed size.
+**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (16 languages) of Universal Sentence Encoder (USE). MUSE model encodes sentences into embedding vectors of fixed size.
 
-- *MUSE* paper: [link](https://arxiv.org/abs/1907.04307).
-- *USE* paper: [link](https://arxiv.org/abs/1803.11175).
+- MUSE paper: [link](https://arxiv.org/abs/1907.04307)
+- USE paper: [link](https://arxiv.org/abs/1803.11175)
 
 ### What is MUSE as Service?
-*MUSE as Service* is REST API for sentence tokenization and embedding using MUSE from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3).<br>
-It is written with *flask* + *gunicorn* = ❤️
+MUSE as Service is the **REST API** for sentence tokenization and embedding using MUSE model from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3).
+
+It is written with **flask** and **gunicorn**.
 
 ### Why I need it?
-MUSE from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3) requires to be installed:
-- *tensorflow*
-- *tensorflow-hub*
-- *tensorflow-text*
+MUSE model from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3) requires next packages to be installed:
+- tensorflow
+- tensorflow-hub
+- tensorflow-text
 
-These libraries take up more than **1GB** of memory. The model itself takes up **280MB** of memory.
+These packages take up more than **1GB** of memory. The model itself takes up **280MB** of memory.
 
-For efficient memory usage when working with *MUSE* on several projects (several virtual environments) and with teammates (several model copies on different computers) it is better to deploy one instance of model with one virtual environment where all teammates have access to.<br>
-This is why *MUSE as Service* was made! 💡
+For efficient memory usage when working with MUSE model on several projects (several virtual environments) or/and with teammates (several model copies on different computers) it is better to deploy one instance of the model in one virtual environment where all teammates have access to.
+
+This is what **MUSE as Service** made for! ❤️
 
 ### Installation
 ```
@@ -39,15 +40,12 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
-### Run Service
-To build a **docker image** with a service (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file) run:
+### Launch the Service
+To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
 ```
 docker build -t muse_as_service .
 ```
-**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service):
-```
-docker pull dayyass/muse_as_service
-```
+**NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service).
 
 To launch the service (either locally or on a server) use a **docker container**:
 ```
@@ -56,26 +54,31 @@ docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_ser
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
 
 You can also launch a service without docker using:
-- *gunicorn*: `./gunicorn.sh` (you can configure *gunicorn* with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
-- *flask*: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)<br>
+- **gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
+- **flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
+
 But it is preferable to launch the service inside the docker container.
 
-### GPU support
-*MUSE as Service* supports **GPU** inference. To launch service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support):
-- *flask*: `CUDA_VISIBLE_DEVICES={device_number} python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
+#### GPU support
+MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU):
+- **flask**: `CUDA_VISIBLE_DEVICES={device_number} python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
-**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` are not separated. There is why `tensorflow>=2.0.0` placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt)
-**NOTE**: depending in **CUDA** version you need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with *TF/CUDA* compatibility to choose right one and `pip install` it.
+**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt)<br>
+**NOTE**: depending on **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
+
+#### Token Authentification
+Since the service is usually running on the server, it is important to restrict access to the service. For this reason, MUSE as Service uses token-based authentication.
+
+After you launch the service, you will receive UUID token to access the service.
 
 ### Usage
-After you launch the service, you can tokenize and embed any {*sentence*} using **GET requests** (request parametrized with `ip` and `port` where the service was launched, and `token` for authentication):
+After you launch the service, you can tokenize and embed any sentences using **HTTP GET requests** (request parametrized with `ip` and `port` where the service has launched, and `token` for authentication):
 ```
-http://{ip}:{port}/tokenize?token={token}&sentence={sentence}
-http://{ip}:{port}/embed?token={token}&sentence={sentence}
+http://{ip}:{port}/tokenize?token={token}&sentence={sentence_1}&sentence={sentence_2}
+http://{ip}:{port}/embed?token={token}&sentence={sentence_1}&sentence={sentence_2}
 ```
-**NOTE**: in all examples of using the service, *token authentication* is used.
 
-You can use python **requests** library to work with GET requests (example [script](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_requests.py)):
+You can use python **requests** package to work with HTTP GET requests:
 ```python3
 import os
 
@@ -116,7 +119,7 @@ print(tokenized_sentence)  # [
 print(embedding.shape)  # (2, 512)
 ```
 
-But it is better to use the built-in client [**MUSEClient**](https://github.com/dayyass/muse_as_service/blob/main/muse_as_service/client.py) for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides a user with a simpler interface (example [script](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_client.py)):
+But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface:
 ```python3
 import os
 import sys
@@ -153,11 +156,6 @@ print(tokenized_sentence)  # [
 # ]
 print(embedding.shape)  # (2, 512)
 ```
-
-Features:
-- **token authentication** is used to service access
-- **batch inference** is supported
-- **GPU inference** is supported (more about it [here](https://github.com/dayyass/muse_as_service#gpu-support))
 
 ### Tests
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
