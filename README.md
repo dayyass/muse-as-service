@@ -14,7 +14,7 @@ MUSE/USE models encode sentences into embedding vectors of fixed size.
 - *USE* paper: [link](https://arxiv.org/abs/1803.11175).
 
 ### What is MUSE as Service?
-**MUSE as Service** is REST API for sentence tokenization and embedding using MUSE from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3).<br>
+*MUSE as Service* is REST API for sentence tokenization and embedding using MUSE from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3).<br>
 It is written with *flask* + *gunicorn* = ❤️
 
 ### Why I need it?
@@ -26,7 +26,7 @@ MUSE from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-m
 These libraries take up more than **1GB** of memory. The model itself takes up **280MB** of memory.
 
 For efficient memory usage when working with *MUSE* on several projects (several virtual environments) and with teammates (several model copies on different computers) it is better to deploy one instance of model with one virtual environment where all teammates have access to.<br>
-This is why **MUSE as Service** was made! 💡
+This is why *MUSE as Service* was made! 💡
 
 ### Installation
 ```
@@ -59,6 +59,13 @@ You can also launch a service without docker using:
 - *gunicorn*: `./gunicorn.sh` (you can configure *gunicorn* with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - *flask*: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)<br>
 But it is preferable to launch the service inside the docker container.
+
+### GPU support
+*MUSE as Service* supports **GPU** inference. To launch service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support):
+- *flask*: `CUDA_VISIBLE_DEVICES={device_number} python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
+
+**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` are not separated. There is why `tensorflow>=2.0.0` placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt)
+**NOTE**: depending in **CUDA** version you need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with *TF/CUDA* compatibility to choose right one and `pip install` it.
 
 ### Usage
 After you launch the service, you can tokenize and embed any {*sentence*} using **GET requests** (request parametrized with `ip` and `port` where the service was launched, and `token` for authentication):
@@ -150,6 +157,7 @@ print(embedding.shape)  # (2, 512)
 Features:
 - **token authentication** is used to service access
 - **batch inference** is supported
+- **GPU inference** is supported (more about it [here](https://github.com/dayyass/muse_as_service#gpu-support))
 
 ### Tests
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
