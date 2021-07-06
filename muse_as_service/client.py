@@ -25,11 +25,11 @@ class MUSEClient:
 
         self.url_service = f"http://{self.ip}:{self.port}"
 
-    def _tokenize_url(self, sentence: str) -> str:
+    def _tokenize_url(self, sentences: List[str]) -> str:
         """
         HTTP GET url for tokenization.
 
-        :param str sentence: sentence for tokenization.
+        :param List[str] sentences: sentences for tokenization.
         :return: HTTP GET url
         :rtype: str
         """
@@ -37,17 +37,17 @@ class MUSEClient:
         request = requests.Request(
             method="GET",
             url=f"{self.url_service}/tokenize",
-            params={"token": self.token, "sentence": f"{sentence}"},
+            params={"token": self.token, "sentence": sentences},
         )
         url = request.prepare().url
 
         return url  # type: ignore
 
-    def _embed_url(self, sentence: str) -> str:
+    def _embed_url(self, sentences: List[str]) -> str:
         """
         HTTP GET url for embedding.
 
-        :param str sentence: sentence for embedding.
+        :param List[str] sentences: sentences for embedding.
         :return: HTTP GET url
         :rtype: str
         """
@@ -55,40 +55,40 @@ class MUSEClient:
         request = requests.Request(
             method="GET",
             url=f"{self.url_service}/embed",
-            params={"token": self.token, "sentence": f"{sentence}"},
+            params={"token": self.token, "sentence": sentences},
         )
         url = request.prepare().url
 
         return url  # type: ignore
 
-    def tokenize(self, sentence: str) -> List[str]:
+    def tokenize(self, sentences: List[str]) -> List[List[str]]:
         """
-        Sentence tokenization using MUSE.
+        Sentences tokenization using MUSE.
 
-        :param str sentence: sentence for tokenization.
-        :return: tokenized sentence.
-        :rtype: List[str]
+        :param List[str] sentences: sentences for tokenization.
+        :return: tokenized sentences.
+        :rtype: List[List[str]]
         """
 
-        response = requests.get(self._tokenize_url(sentence))
+        response = requests.get(self._tokenize_url(sentences))
 
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:
             return response.json()["tokens"]
 
-    def embed(self, sentence: str) -> np.ndarray:
+    def embed(self, sentences: List[str]) -> np.ndarray:
         """
-        Sentence embedding using MUSE.
+        Sentences embedding using MUSE.
 
-        :param str sentence: sentence for embedding.
-        :return: sentence embedding.
+        :param List[str] sentences: sentences for embedding.
+        :return: sentences embeddings.
         :rtype: np.ndarray
         """
 
-        response = requests.get(self._embed_url(sentence))
+        response = requests.get(self._embed_url(sentences))
 
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:
-            return np.array(response.json()["embedding"][0])
+            return np.array(response.json()["embedding"])
