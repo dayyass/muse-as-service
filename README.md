@@ -150,6 +150,7 @@ print(embedding.shape)  # (2, 512)
 Features:
 - **token authentication** is used to service access
 - **batch inference** is supported
+- **GPU inference** is supported (use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device)
 
 ### Tests
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
