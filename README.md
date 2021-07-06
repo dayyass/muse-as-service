@@ -15,7 +15,7 @@
 ### What is MUSE as Service?
 MUSE as Service is the **REST API** for sentence tokenization and embedding using MUSE model from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3).
 
-It is written with **flask** and **gunicorn**.
+It is written using **Flask** and **Gunicorn**.
 
 ### Why I need it?
 MUSE model from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3) requires next packages to be installed:
@@ -54,16 +54,16 @@ docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_ser
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
 
 You can also launch a service without docker using:
-- **gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
-- **flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
+- **Gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
+- **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
 But it is preferable to launch the service inside the docker container.
 
 #### GPU support
 MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU):
-- **flask**: `CUDA_VISIBLE_DEVICES={device_number} python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
+- **Flask**: `CUDA_VISIBLE_DEVICES={device_number} python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
-**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt)<br>
+**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt).<br>
 **NOTE**: depending on **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
 #### Token Authentification
