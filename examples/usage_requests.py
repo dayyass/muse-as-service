@@ -12,34 +12,40 @@ url_service = f"http://{ip}:{port}"
 url_tokenize = f"{url_service}/tokenize"
 url_embed = f"{url_service}/embed"
 
-# sentence
-sentence = "This is sentence example."
+# sentences
+sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 response = requests.get(
     url=url_tokenize,
-    params={"token": token, "sentence": sentence},
+    params={"token": token, "sentence": sentences},
 )
 tokenized_sentence = response.json()["tokens"]
 
 # embedder
 response = requests.get(
     url=url_embed,
-    params={"token": token, "sentence": sentence},
+    params={"token": token, "sentence": sentences},
 )
-embedding = np.array(response.json()["embedding"][0])
+embedding = np.array(response.json()["embedding"])
 
 # results
-print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
-print(embedding.shape)  # (512,)
+print(tokenized_sentence)  # [
+# ["▁This", "▁is", "▁sentence", "▁example", "."],
+# ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."]
+# ]
+print(embedding.shape)  # (2, 512)
 
 
 # tests
 np.testing.assert_equal(
     tokenized_sentence,
-    ["▁This", "▁is", "▁sentence", "▁example", "."],
+    [
+        ["▁This", "▁is", "▁sentence", "▁example", "."],
+        ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."],
+    ],
 )
 np.testing.assert_equal(
     embedding.shape,
-    (512,),
+    (2, 512),
 )

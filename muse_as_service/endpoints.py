@@ -44,11 +44,19 @@ class Embedder(Resource):
 
         # add sentence argument
         parser = reqparse.RequestParser()
-        parser.add_argument("token", required=True, type=str)  # auth
-        parser.add_argument("sentence", required=True, type=str)
+        parser.add_argument(
+            "token", type=str, required=True, help="token for authentication"
+        )
+        parser.add_argument(
+            "sentence",
+            type=str,
+            action="append",
+            required=True,
+            help="sentences for embedding",
+        )
         args = parser.parse_args()
 
-        if current_app.token != args.token:
+        if current_app.token != args["token"]:
             abort(unauthorized())
         else:
             embedding = self.embedder(args["sentence"]).numpy().tolist()
@@ -72,7 +80,7 @@ class Tokenizer(Resource):
 
         self.tokenizer = get_tokenizer_from_saved_model(parse_saved_model(model_path))
 
-    def get(self):
+    def get(self) -> Response:
         """
         GET request method.
 
@@ -82,15 +90,23 @@ class Tokenizer(Resource):
 
         # add sentence argument
         parser = reqparse.RequestParser()
-        parser.add_argument("token", required=True, type=str)  # auth
-        parser.add_argument("sentence", required=True, type=str)
+        parser.add_argument(
+            "token", type=str, required=True, help="token for authentication"
+        )
+        parser.add_argument(
+            "sentence",
+            type=str,
+            action="append",
+            required=True,
+            help="sentences for tokenization",
+        )
         args = parser.parse_args()
 
-        if current_app.token != args.token:
+        if current_app.token != args["token"]:
             abort(unauthorized())
         else:
             tokenized_sentence = tokenize(
-                sentence=args["sentence"],
+                sentences=args["sentence"],
                 tokenizer=self.tokenizer,
             )
             return jsonify(tokens=tokenized_sentence)

@@ -84,26 +84,29 @@ url_service = f"http://{ip}:{port}"
 url_tokenize = f"{url_service}/tokenize"
 url_embed = f"{url_service}/embed"
 
-# sentence
-sentence = "This is sentence example."
+# sentences
+sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 response = requests.get(
     url=url_tokenize,
-    params={"token": token, "sentence": sentence},
+    params={"token": token, "sentence": sentences},
 )
 tokenized_sentence = response.json()["tokens"]
 
 # embedder
 response = requests.get(
     url=url_embed,
-    params={"token": token, "sentence": sentence},
+    params={"token": token, "sentence": sentences},
 )
-embedding = np.array(response.json()["embedding"][0])
+embedding = np.array(response.json()["embedding"])
 
 # results
-print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
-print(embedding.shape)  # (512,)
+print(tokenized_sentence)  # [
+# ["▁This", "▁is", "▁sentence", "▁example", "."],
+# ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."]
+# ]
+print(embedding.shape)  # (2, 512)
 ```
 
 But it is better to use the built-in client [**MUSEClient**](https://github.com/dayyass/muse_as_service/blob/main/muse_as_service/client.py) for sentence tokenization and embedding, that wraps the functionality of the **requests** library and provides a user with a simpler interface (example [script](https://github.com/dayyass/muse_as_service/blob/main/examples/usage_client.py)):
@@ -120,8 +123,8 @@ ip = os.environ["IP"]
 port = int(os.environ["PORT"])
 token = os.environ["TOKEN"]
 
-# sentence
-sentence = "This is sentence example."
+# sentences
+sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # init client
 client = MUSEClient(
@@ -131,15 +134,22 @@ client = MUSEClient(
 )
 
 # tokenizer
-tokenized_sentence = client.tokenize(sentence)
+tokenized_sentence = client.tokenize(sentences)
 
 # embedder
-embedding = client.embed(sentence)
+embedding = client.embed(sentences)
 
 # results
-print(tokenized_sentence)  # ['▁This', '▁is', '▁sentence', '▁example', '.']
-print(embedding.shape)  # (512,)
+print(tokenized_sentence)  # [
+# ["▁This", "▁is", "▁sentence", "▁example", "."],
+# ["▁This", "▁is", "▁yet", "▁another", "▁sentence", "▁example", "."]
+# ]
+print(embedding.shape)  # (2, 512)
 ```
+
+Features:
+- **token authentication** is used to service access
+- **batch inference** is supported
 
 ### Tests
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
