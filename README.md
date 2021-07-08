@@ -41,8 +41,7 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
-Before using the service you need to download MUSE model.<br>
-Instruction [here](https://github.com/dayyass/muse_as_service/blob/main/models/README.md).
+Before using the service you need to download MUSE model. Instruction [here](https://github.com/dayyass/muse_as_service/blob/main/models/README.md).
 
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
@@ -57,15 +56,22 @@ docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_ser
 ```
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
 
-You can also launch a service without docker using:
+You can also launch a service without docker, but it is preferable to launch the service inside the docker container:
 - **Gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
-But it is preferable to launch the service inside the docker container.
+**NOTE**:<br>
+Before launching a service without docker, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
+```shell script
+export SECRET_KEY={SECRET_KEY}
+export JWT_SECRET_KEY={JWT_SECRET_KEY}
+```
+To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
 #### GPU support
-MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU):
-- **Flask**: `CUDA_VISIBLE_DEVICES={device_number} python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
+MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU).
+
+You can set it up as environment variables with: `export CUDA_VISIBLE_DEVICES=0`
 
 **NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt).<br>
 **NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
@@ -168,11 +174,17 @@ print(embedding.shape)  # (2, 512)
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
+Before running tests and code coverage, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
+```shell script
+export SECRET_KEY=test
+export JWT_SECRET_KEY=test
+```
+
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
-`SECRET_KEY=test JWT_SECRET_KEY=test python -m unittest discover`
+`python -m unittest discover`
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
-`SECRET_KEY=test JWT_SECRET_KEY=test coverage run -m unittest discover && coverage report -m`
+`coverage run -m unittest discover && coverage report -m`
 
 ### MUSE supported languages
 MUSE model supports next languages:
