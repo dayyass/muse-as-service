@@ -36,6 +36,9 @@ jobs:
     - name: Generate coverage report
       run: |
         pytest --cov=./ --cov-report=xml
+      env:
+        SECRET_KEY: test
+        JWT_SECRET_KEY: test
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
