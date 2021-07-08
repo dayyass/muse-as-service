@@ -26,10 +26,13 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
-        ./models/download_muse.sh
-    - name: Tests
+    - name: Launch Flask app
       run: |
-        python -m unittest discover
+        ./models/download_muse.sh
+        python app.py
       env:
         SECRET_KEY: test
         JWT_SECRET_KEY: test
+    - name: Tests
+      run: |
+        python -m unittest discover
