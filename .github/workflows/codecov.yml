@@ -28,7 +28,7 @@ jobs:
         pip install pytest pytest-cov
     - name: Launch Flask app
       run: |
-        ./models/download_muse.sh
+        python models/download_muse.py
         python app.py &
       env:
         SECRET_KEY: test
