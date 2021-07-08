@@ -26,6 +26,7 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
+        ./models/download_muse.sh
     - name: Tests
       run: |
         python -m unittest discover

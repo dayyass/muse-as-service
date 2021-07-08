@@ -26,6 +26,7 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov
+        ./models/download_muse.sh
         pytest --cov=./ --cov-report=xml
       env:
         SECRET_KEY: test

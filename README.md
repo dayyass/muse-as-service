@@ -41,7 +41,10 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
-Before using the service you need to download MUSE model. Instruction [here](https://github.com/dayyass/muse_as_service/blob/main/models/README.md).
+Before using the service you need to download MUSE model. You can do it using next script:
+```
+./models/download_muse.sh
+```
 
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:

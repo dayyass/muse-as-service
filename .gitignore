@@ -14,3 +14,4 @@ venv
 
 models/*
 !models/README.md
+!models/download_muse.sh
