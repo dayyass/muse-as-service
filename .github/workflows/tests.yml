@@ -29,3 +29,6 @@ jobs:
     - name: Tests
       run: |
         python -m unittest discover
+      env:
+        SECRET_KEY: test
+        JWT_SECRET_KEY: test
