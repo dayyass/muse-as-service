@@ -39,7 +39,6 @@ class MUSEClient:
             data={"username": username, "password": password},
         )
 
-        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:
@@ -56,11 +55,8 @@ class MUSEClient:
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
 
-        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
-        else:
-            self._access_token = response.json()["access_token"]
 
     def logout_refresh(self) -> None:
         """
@@ -72,11 +68,8 @@ class MUSEClient:
             headers={"Authorization": f"Bearer {self._refresh_token}"},
         )
 
-        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
-        else:
-            self._refresh_token = response.json()["refresh_token"]
 
     def token_refresh(self) -> None:
         """
@@ -88,7 +81,6 @@ class MUSEClient:
             headers={"Authorization": f"Bearer {self._refresh_token}"},
         )
 
-        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:
@@ -109,7 +101,6 @@ class MUSEClient:
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
 
-        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:
@@ -130,7 +121,6 @@ class MUSEClient:
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
 
-        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:
