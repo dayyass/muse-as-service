@@ -29,7 +29,7 @@ jobs:
     - name: Launch Flask app
       run: |
         ./models/download_muse.sh
-        python app.py
+        python app.py &
       env:
         SECRET_KEY: test
         JWT_SECRET_KEY: test
