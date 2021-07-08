@@ -41,6 +41,9 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
+Before using the service you need to download MUSE model.<br>
+Instruction [here](https://github.com/dayyass/muse_as_service/blob/main/models/README.md).
+
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
 ```
@@ -67,13 +70,27 @@ MUSE as Service supports **GPU** inference. To launch the service with GPU suppo
 **NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt).<br>
 **NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
-#### Token Authorization
-Since the service is usually running on the server, it is important to restrict access to the service. For this reason, MUSE as Service uses token-based authorization.
-
-After you launch the service, you will receive UUID token to access the service.
-
 ### Usage
-You can use python **requests** package to work with HTTP GET requests:
+Since the service is usually running on the server, it is important to restrict access to the service.<br>
+
+For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).<br>
+
+Initially database has only one user with **username**: "admin" and **password**: "admin".<br>
+To add new user with `username` and `password` run:
+```
+python muse_as_service/database/add_user.py --username {username} --password {password}
+```
+**NOTE**: no passwords are stored in the database, only their hashes.
+
+MUSE as Service has next endpoints:
+- /login          - POST request with `username` and `password` to get JWT tokens (access and refresh)
+- /logout/access  - POST request to remove JWT access token (JWT access token required)
+- /logout/refresh - POST request to remove JWT refresh token (JWT refresh token required)
+- /token/refresh  - POST request to refresh JWT access token (JWT refresh token required)
+- **/tokenize**   - GET request for `sentence` tokenization (JWT access token required)
+- **/embed**      - GET request for `sentence` embedding (JWT access token required)
+
+You can use python **requests** package to work with HTTP requests:
 ```python3
 import numpy as np
 import requests
@@ -148,11 +165,11 @@ print(embedding.shape)  # (2, 512)
 ```
 
 ### Tests
-To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
-`SECRET_KEY=test JWT_SECRET_KEY=test python -m unittest discover`
-
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
+
+To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
+`SECRET_KEY=test JWT_SECRET_KEY=test python -m unittest discover`
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
 `SECRET_KEY=test JWT_SECRET_KEY=test coverage run -m unittest discover && coverage report -m`
