@@ -44,12 +44,12 @@ api.add_resource(TokenRefresh, "/token/refresh")
 model_path = "models/universal-sentence-encoder-multilingual_3"
 
 api.add_resource(
-    resource=Embedder,
-    urls="/embed",
+    Embedder,
+    "/embed",
     resource_class_kwargs={"model_path": model_path},
 )
 api.add_resource(
-    resource=Tokenizer,
-    urls="/tokenize",
+    Tokenizer,
+    "/tokenize",
     resource_class_kwargs={"model_path": model_path},
 )
