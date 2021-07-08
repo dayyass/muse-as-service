@@ -10,56 +10,89 @@ class MUSEClient:
     It is wrapper over requests.get method.
     """
 
-    def __init__(self, token: str, ip: str = "localhost", port: int = 5000) -> None:
+    def __init__(self, ip: str = "localhost", port: int = 5000) -> None:
         """
-        Init MUSEClient with token, ip and port.
+        Init MUSEClient with ip and port.
 
-        :param str token: token for authorization.
         :param str ip: address where service was created (default: "localhost").
         :param int port: port where service launched (default: 5000).
         """
 
         self.ip = ip
         self.port = port
-        self.token = token
 
         self.url_service = f"http://{self.ip}:{self.port}"
 
-    def _tokenize_url(self, sentences: List[str]) -> str:
-        """
-        HTTP GET url for tokenization.
+        self._access_token = None
+        self._refresh_token = None
 
-        :param List[str] sentences: sentences for tokenization.
-        :return: HTTP GET url
-        :rtype: str
+    def login(self, username: str, password: str) -> None:
+        """
+        Login to access service for tokenization and embedding.
+
+        :param str username: username.
+        :param str password: password.
         """
 
-        request = requests.Request(
-            method="GET",
-            url=f"{self.url_service}/tokenize",
-            params={"token": self.token, "sentence": sentences},
+        response = requests.post(
+            url=f"{self.url_service}/login",
+            data={"username": username, "password": password},
         )
-        url = request.prepare().url
 
-        return url  # type: ignore
+        # TODO: fix it
+        if response.status_code != 200:
+            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+        else:
+            self._access_token = response.json()["access_token"]
+            self._refresh_token = response.json()["refresh_token"]
 
-    def _embed_url(self, sentences: List[str]) -> str:
+    def logout_access(self) -> None:
         """
-        HTTP GET url for embedding.
-
-        :param List[str] sentences: sentences for embedding.
-        :return: HTTP GET url
-        :rtype: str
+        Logout with access token.
         """
 
-        request = requests.Request(
-            method="GET",
-            url=f"{self.url_service}/embed",
-            params={"token": self.token, "sentence": sentences},
+        response = requests.post(
+            url=f"{self.url_service}/logout/access",
+            headers={"Authorization": f"Bearer {self._access_token}"},
         )
-        url = request.prepare().url
 
-        return url  # type: ignore
+        # TODO: fix it
+        if response.status_code != 200:
+            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+        else:
+            self._access_token = response.json()["access_token"]
+
+    def logout_refresh(self) -> None:
+        """
+        Logout with refresh token.
+        """
+
+        response = requests.post(
+            url=f"{self.url_service}/logout/refresh",
+            headers={"Authorization": f"Bearer {self._refresh_token}"},
+        )
+
+        # TODO: fix it
+        if response.status_code != 200:
+            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+        else:
+            self._refresh_token = response.json()["refresh_token"]
+
+    def token_refresh(self) -> None:
+        """
+        Refresh access token.
+        """
+
+        response = requests.post(
+            url=f"{self.url_service}/token/refresh",
+            headers={"Authorization": f"Bearer {self._refresh_token}"},
+        )
+
+        # TODO: fix it
+        if response.status_code != 200:
+            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+        else:
+            self._access_token = response.json()["access_token"]
 
     def tokenize(self, sentences: List[str]) -> List[List[str]]:
         """
@@ -70,8 +103,13 @@ class MUSEClient:
         :rtype: List[List[str]]
         """
 
-        response = requests.get(self._tokenize_url(sentences))
+        response = requests.get(
+            url=f"{self.url_service}/tokenize",
+            params={"sentence": sentences},
+            headers={"Authorization": f"Bearer {self._access_token}"},
+        )
 
+        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:
@@ -86,8 +124,13 @@ class MUSEClient:
         :rtype: np.ndarray
         """
 
-        response = requests.get(self._embed_url(sentences))
+        response = requests.get(
+            url=f"{self.url_service}/embed",
+            params={"sentence": sentences},
+            headers={"Authorization": f"Bearer {self._access_token}"},
+        )
 
+        # TODO: fix it
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
         else:

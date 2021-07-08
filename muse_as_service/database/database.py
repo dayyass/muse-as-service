@@ -27,17 +27,6 @@ class UserModel(db.Model):
 
     @classmethod
     def find_by_username(cls, username: str):
-        import sys
-
-        print("-", cls.query.filter_by(username=username).first(), file=sys.stderr)
-        print("-", cls.query.filter_by(username=username).first(), file=sys.stdout)
-
-        print(
-            "-", type(cls.query.filter_by(username=username).first()), file=sys.stderr
-        )
-        print(
-            "-", type(cls.query.filter_by(username=username).first()), file=sys.stdout
-        )
         return cls.query.filter_by(username=username).first()
 
 

@@ -30,7 +30,7 @@ from muse_as_service.auth import (  # noqa: E402
     UserLogoutAccess,
     UserLogoutRefresh,
 )
-from muse_as_service.database import RevokedTokenModel  # noqa: E402
+from muse_as_service.database.database import RevokedTokenModel  # noqa: E402
 from muse_as_service.endpoints import Embedder, Tokenizer  # noqa: E402
 
 # auth

@@ -123,17 +123,15 @@ from muse_as_service import MUSEClient
 # params
 ip = "localhost"
 port = 5000
-token = "TOKEN"
+
+# init client
+client = MUSEClient(ip=ip, port=port)
+
+# login
+client.login(username="admin", password="admin")
 
 # sentences
 sentences = ["This is sentence example.", "This is yet another sentence example."]
-
-# init client
-client = MUSEClient(
-    ip=ip,
-    port=port,
-    token=token,
-)
 
 # tokenizer
 tokenized_sentence = client.tokenize(sentences)
@@ -151,13 +149,13 @@ print(embedding.shape)  # (2, 512)
 
 ### Tests
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
-`python -m unittest discover`
+`SECRET_KEY=test JWT_SECRET_KEY=test python -m unittest discover`
 
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
-`coverage run -m unittest discover && coverage report -m`
+`SECRET_KEY=test JWT_SECRET_KEY=test coverage run -m unittest discover && coverage report -m`
 
 ### MUSE supported languages
 MUSE model supports next languages:

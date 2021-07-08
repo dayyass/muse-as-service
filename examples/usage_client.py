@@ -1,4 +1,3 @@
-import os
 import sys
 
 sys.path.append("../muse_as_service")
@@ -6,19 +5,17 @@ sys.path.append("../muse_as_service")
 from muse_as_service import MUSEClient  # noqa: E402
 
 # params
-ip = os.environ["IP"]
-port = int(os.environ["PORT"])
-token = os.environ["TOKEN"]
+ip = "localhost"
+port = 5000
+
+# init client
+client = MUSEClient(ip=ip, port=port)
+
+# login
+client.login(username="admin", password="admin")
 
 # sentences
 sentences = ["This is sentence example.", "This is yet another sentence example."]
-
-# init client
-client = MUSEClient(
-    ip=ip,
-    port=port,
-    token=token,
-)
 
 # tokenizer
 tokenized_sentence = client.tokenize(sentences)
