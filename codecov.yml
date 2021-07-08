@@ -28,6 +28,8 @@ status:
       target: 100%
     source:
       paths:
-        - "jupytext/"
-      target: 100%
-      threshold: 50%
+        - "muse_as_service/"
+      target: 50%
+  patch:
+    default:
+      target: 50%
