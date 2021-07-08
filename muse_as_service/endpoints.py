@@ -36,10 +36,7 @@ class Embedder(Resource):
     MUSE Embedder API resource.
     """
 
-    def __init__(
-        self,
-        model_path: str = ".cache/universal-sentence-encoder-multilingual_3",
-    ) -> None:
+    def __init__(self, model_path: str) -> None:
         """
         Init Embedder class with tfhub downloaded MUSE model.
 
@@ -69,10 +66,7 @@ class Tokenizer(Resource):
     MUSE Tokenizer API resource.
     """
 
-    def __init__(
-        self,
-        model_path: str = ".cache/universal-sentence-encoder-multilingual_3",
-    ) -> None:
+    def __init__(self, model_path: str) -> None:
         """
         Init Tokenizer class with tfhub downloaded MUSE model.
 
