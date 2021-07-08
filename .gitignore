@@ -11,3 +11,6 @@
 
 venv
 .idea
+
+models/*
+!models/README.md
