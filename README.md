@@ -66,13 +66,13 @@ MUSE as Service supports **GPU** inference. To launch the service with GPU suppo
 **NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt).<br>
 **NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
-#### Token Authentification
-Since the service is usually running on the server, it is important to restrict access to the service. For this reason, MUSE as Service uses token-based authentication.
+#### Token Authorization
+Since the service is usually running on the server, it is important to restrict access to the service. For this reason, MUSE as Service uses token-based authorization.
 
 After you launch the service, you will receive UUID token to access the service.
 
 ### Usage
-After you launch the service, you can tokenize and embed any sentences using **HTTP GET requests** (request parametrized with `ip` and `port` where the service has launched, and `token` for authentication):
+After you launch the service, you can tokenize and embed any sentences using **HTTP GET requests** (request parametrized with `ip` and `port` where the service has launched, and `token` for authorization):
 ```
 http://{ip}:{port}/tokenize?token={token}&sentence={sentence_1}&sentence={sentence_2}
 http://{ip}:{port}/embed?token={token}&sentence={sentence_1}&sentence={sentence_2}
