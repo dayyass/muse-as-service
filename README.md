@@ -7,7 +7,8 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### What is MUSE?
-**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (16 languages) of Universal Sentence Encoder (USE). MUSE model encodes sentences into embedding vectors of fixed size.
+**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension ([16 languages](https://github.com/dayyass/muse_as_service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
+MUSE model encodes sentences into embedding vectors of fixed size.
 
 - MUSE paper: [link](https://arxiv.org/abs/1907.04307)
 - USE paper: [link](https://arxiv.org/abs/1803.11175)
@@ -159,6 +160,25 @@ To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
 `coverage run -m unittest discover && coverage report -m`
+
+### MUSE supported languages
+MUSE model supports next languages:
+- Arabic
+- Chinese-simplified
+- Chinese-traditional
+- English
+- French
+- German
+- Italian
+- Japanese
+- Korean
+- Dutch
+- Polish
+- Portuguese
+- Spanish
+- Thai
+- Turkish
+- Russian
 
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:
