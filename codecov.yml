@@ -1,0 +1,22 @@
+codecov:
+  require_ci_to_pass: yes
+
+ignore:
+  - "muse_as_service/utils.py"
+  - "muse_as_service/database/add_user.py"
+
+coverage:
+  status:
+    project:
+      default: false
+      tests:
+        paths:
+          - "tests/"
+        target: 100%
+      source:
+        paths:
+          - "muse_as_service/"
+        target: 100%
+    patch:
+      default:
+        target: 100%
