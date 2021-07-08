@@ -1,31 +1,33 @@
-import os
-
 import numpy as np
 import requests
 
 # params
-ip = os.environ["IP"]
-port = int(os.environ["PORT"])
-token = os.environ["TOKEN"]
+ip = "localhost"
+port = 5000
 
-url_service = f"http://{ip}:{port}"
-url_tokenize = f"{url_service}/tokenize"
-url_embed = f"{url_service}/embed"
+# login
+response = requests.post(
+    url=f"http://{ip}:{port}/login",
+    data={"username": "admin", "password": "admin"},
+)
+token = response.json()["access_token"]
 
 # sentences
 sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 response = requests.get(
-    url=url_tokenize,
-    params={"token": token, "sentence": sentences},
+    url=f"http://{ip}:{port}/tokenize",
+    params={"sentence": sentences},
+    headers={"Authorization": f"Bearer {token}"},
 )
 tokenized_sentence = response.json()["tokens"]
 
 # embedder
 response = requests.get(
-    url=url_embed,
-    params={"token": token, "sentence": sentences},
+    url=f"http://{ip}:{port}/embed",
+    params={"sentence": sentences},
+    headers={"Authorization": f"Bearer {token}"},
 )
 embedding = np.array(response.json()["embedding"])
 

@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@master
     - name: Setup Python
@@ -26,7 +26,11 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov
+        ./models/download_muse.sh
         pytest --cov=./ --cov-report=xml
+      env:
+        SECRET_KEY: test
+        JWT_SECRET_KEY: test
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:

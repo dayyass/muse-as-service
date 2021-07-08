@@ -7,7 +7,8 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### What is MUSE?
-**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (16 languages) of Universal Sentence Encoder (USE). MUSE model encodes sentences into embedding vectors of fixed size.
+**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension ([16 languages](https://github.com/dayyass/muse_as_service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
+MUSE model encodes sentences into embedding vectors of fixed size.
 
 - MUSE paper: [link](https://arxiv.org/abs/1907.04307)
 - USE paper: [link](https://arxiv.org/abs/1803.11175)
@@ -40,6 +41,11 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
+Before using the service you need to download MUSE model. You can do it using next script:
+```
+./models/download_muse.sh
+```
+
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
 ```
@@ -53,32 +59,48 @@ docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_ser
 ```
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
 
-You can also launch a service without docker using:
+You can also launch a service without docker, but it is preferable to launch the service inside the docker container:
 - **Gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
-But it is preferable to launch the service inside the docker container.
+**NOTE**:<br>
+Before launching a service without docker, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
+```shell script
+export SECRET_KEY={SECRET_KEY}
+export JWT_SECRET_KEY={JWT_SECRET_KEY}
+```
+To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
 #### GPU support
-MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU):
-- **Flask**: `CUDA_VISIBLE_DEVICES={device_number} python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
+MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU).
 
-**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt).<br>
+You can set it up as environment variables with: `export CUDA_VISIBLE_DEVICES=0`
+
+**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt).
+
 **NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
-#### Token Authentification
-Since the service is usually running on the server, it is important to restrict access to the service. For this reason, MUSE as Service uses token-based authentication.
-
-After you launch the service, you will receive UUID token to access the service.
-
 ### Usage
-After you launch the service, you can tokenize and embed any sentences using **HTTP GET requests** (request parametrized with `ip` and `port` where the service has launched, and `token` for authentication):
-```
-http://{ip}:{port}/tokenize?token={token}&sentence={sentence_1}&sentence={sentence_2}
-http://{ip}:{port}/embed?token={token}&sentence={sentence_1}&sentence={sentence_2}
-```
+Since the service is usually running on the server, it is important to restrict access to the service.<br>
 
-You can use python **requests** package to work with HTTP GET requests:
+For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).<br>
+
+Initially database has only one user with **username**: "admin" and **password**: "admin".<br>
+To add new user with `username` and `password` run:
+```
+python muse_as_service/database/add_user.py --username {username} --password {password}
+```
+**NOTE**: no passwords are stored in the database, only their hashes.
+
+MUSE as Service has next endpoints:
+- /login          - POST request with `username` and `password` to get JWT tokens (access and refresh)
+- /logout/access  - POST request to remove JWT access token (JWT access token required)
+- /logout/refresh - POST request to remove JWT refresh token (JWT refresh token required)
+- /token/refresh  - POST request to refresh JWT access token (JWT refresh token required)
+- **/tokenize**   - GET request for `sentence` tokenization (JWT access token required)
+- **/embed**      - GET request for `sentence` embedding (JWT access token required)
+
+You can use python **requests** package to work with HTTP requests:
 ```python3
 import numpy as np
 import requests
@@ -86,26 +108,30 @@ import requests
 # params
 ip = "localhost"
 port = 5000
-token = "TOKEN"
 
-url_service = f"http://{ip}:{port}"
-url_tokenize = f"{url_service}/tokenize"
-url_embed = f"{url_service}/embed"
+# login
+response = requests.post(
+    url=f"http://{ip}:{port}/login",
+    data={"username": "admin", "password": "admin"},
+)
+token = response.json()["access_token"]
 
 # sentences
 sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 response = requests.get(
-    url=url_tokenize,
-    params={"token": token, "sentence": sentences},
+    url=f"http://{ip}:{port}/tokenize",
+    params={"sentence": sentences},
+    headers={"Authorization": f"Bearer {token}"},
 )
 tokenized_sentence = response.json()["tokens"]
 
 # embedder
 response = requests.get(
-    url=url_embed,
-    params={"token": token, "sentence": sentences},
+    url=f"http://{ip}:{port}/embed",
+    params={"sentence": sentences},
+    headers={"Authorization": f"Bearer {token}"},
 )
 embedding = np.array(response.json()["embedding"])
 
@@ -124,17 +150,15 @@ from muse_as_service import MUSEClient
 # params
 ip = "localhost"
 port = 5000
-token = "TOKEN"
+
+# init client
+client = MUSEClient(ip=ip, port=port)
+
+# login
+client.login(username="admin", password="admin")
 
 # sentences
 sentences = ["This is sentence example.", "This is yet another sentence example."]
-
-# init client
-client = MUSEClient(
-    ip=ip,
-    port=port,
-    token=token,
-)
 
 # tokenizer
 tokenized_sentence = client.tokenize(sentences)
@@ -151,14 +175,39 @@ print(embedding.shape)  # (2, 512)
 ```
 
 ### Tests
-To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
-`python -m unittest discover`
-
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
+Before running tests and code coverage, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
+```shell script
+export SECRET_KEY=test
+export JWT_SECRET_KEY=test
+```
+
+To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
+`python -m unittest discover`
+
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
 `coverage run -m unittest discover && coverage report -m`
+
+### MUSE supported languages
+MUSE model supports next languages:
+- Arabic
+- Chinese-simplified
+- Chinese-traditional
+- English
+- French
+- German
+- Italian
+- Japanese
+- Korean
+- Dutch
+- Polish
+- Portuguese
+- Spanish
+- Thai
+- Turkish
+- Russian
 
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:

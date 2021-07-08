@@ -1,5 +1,6 @@
 import tensorflow_hub as hub
-from flask import Response, abort, current_app, jsonify
+from flask import Response, jsonify
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 
 from muse_as_service.muse_tokenizer.tokenizer import (
@@ -9,12 +10,25 @@ from muse_as_service.muse_tokenizer.tokenizer import (
 )
 
 
-def unauthorized():
-    return Response(
-        "Access denied! Use token for authorization.",
-        401,
-        {"WWW-Authenticate": 'Basic realm="Login Required"'},
+def get_sentence_parser() -> reqparse.RequestParser:
+    """
+    Get request parser.
+
+    :return: request parser.
+    :rtype: reqparse.RequestParser
+    """
+
+    parser = reqparse.RequestParser()
+
+    parser.add_argument(
+        "sentence",
+        type=str,
+        action="append",
+        required=True,
+        help="This field cannot be blank",
     )
+
+    return parser
 
 
 class Embedder(Resource):
@@ -34,6 +48,7 @@ class Embedder(Resource):
 
         self.embedder = hub.KerasLayer(model_path)
 
+    @jwt_required()
     def get(self) -> Response:
         """
         GET request method.
@@ -42,25 +57,11 @@ class Embedder(Resource):
         :rtype: Response
         """
 
-        # add sentence argument
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "token", type=str, required=True, help="token for authentication"
-        )
-        parser.add_argument(
-            "sentence",
-            type=str,
-            action="append",
-            required=True,
-            help="sentences for embedding",
-        )
+        parser = get_sentence_parser()
         args = parser.parse_args()
 
-        if current_app.token != args["token"]:
-            abort(unauthorized())
-        else:
-            embedding = self.embedder(args["sentence"]).numpy().tolist()
-            return jsonify(embedding=embedding)
+        embedding = self.embedder(args["sentence"]).numpy().tolist()
+        return jsonify(embedding=embedding)
 
 
 class Tokenizer(Resource):
@@ -80,6 +81,7 @@ class Tokenizer(Resource):
 
         self.tokenizer = get_tokenizer_from_saved_model(parse_saved_model(model_path))
 
+    @jwt_required()
     def get(self) -> Response:
         """
         GET request method.
@@ -88,25 +90,11 @@ class Tokenizer(Resource):
         :rtype: Response
         """
 
-        # add sentence argument
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "token", type=str, required=True, help="token for authentication"
-        )
-        parser.add_argument(
-            "sentence",
-            type=str,
-            action="append",
-            required=True,
-            help="sentences for tokenization",
-        )
+        parser = get_sentence_parser()
         args = parser.parse_args()
 
-        if current_app.token != args["token"]:
-            abort(unauthorized())
-        else:
-            tokenized_sentence = tokenize(
-                sentences=args["sentence"],
-                tokenizer=self.tokenizer,
-            )
-            return jsonify(tokens=tokenized_sentence)
+        tokenized_sentence = tokenize(
+            sentences=args["sentence"],
+            tokenizer=self.tokenizer,
+        )
+        return jsonify(tokens=tokenized_sentence)
