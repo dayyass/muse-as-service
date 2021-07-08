@@ -14,9 +14,6 @@ class UserModel(db.Model):
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
-    def __repr__(self):
-        return f"<User '{self.username}'>"
-
     @staticmethod
     def generate_hash(password: str) -> str:
         return sha256.hash(password)
