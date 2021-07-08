@@ -41,9 +41,9 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
-Before using the service you need to download MUSE model. You can do it using next script:
+Before using the service you need to download MUSE model. You can do it using next command:
 ```
-./models/download_muse.sh
+python models/download_muse.py
 ```
 
 ### Launch the Service
