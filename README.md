@@ -85,7 +85,10 @@ Since the service is usually running on the server, it is important to restrict 
 
 For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).
 
-Initially database has only one user with **username**: "admin" and **password**: "admin".<br>
+Initially database has only one user with:
+- **username**: "admin"
+- **password**: "admin"
+
 To add new user with `username` and `password` run:
 ```
 python muse_as_service/database/add_user.py --username {username} --password {password}
@@ -93,12 +96,14 @@ python muse_as_service/database/add_user.py --username {username} --password {pa
 **NOTE**: no passwords are stored in the database, only their hashes.
 
 MUSE as Service has next endpoints:
+<pre>
 - /login          - POST request with `username` and `password` to get JWT tokens (access and refresh)
 - /logout/access  - POST request to remove JWT access token (JWT access token required)
 - /logout/refresh - POST request to remove JWT refresh token (JWT refresh token required)
 - /token/refresh  - POST request to refresh JWT access token (JWT refresh token required)
-- **/tokenize**   - GET request for `sentence` tokenization (JWT access token required)
-- **/embed**      - GET request for `sentence` embedding (JWT access token required)
+- /tokenize   - GET request for `sentence` tokenization (JWT access token required)
+- /embed      - GET request for `sentence` embedding (JWT access token required)
+</pre>
 
 You can use python **requests** package to work with HTTP requests:
 ```python3
