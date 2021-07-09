@@ -178,10 +178,16 @@ print(embedding.shape)  # (2, 512)
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
-Before running tests and code coverage, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
+Before running tests and code coverage, you need:
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`
+- run app.py in background
+
+You can do it with following commands:
 ```shell script
 export SECRET_KEY=test
 export JWT_SECRET_KEY=test
+
+python app.py &
 ```
 
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
@@ -189,6 +195,11 @@ To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
 `coverage run -m unittest discover && coverage report -m`
+
+**NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with following command:
+```shell script
+kill $(ps aux | grep '[a]pp.py' | awk '{print $2}')
+```
 
 ### MUSE supported languages
 MUSE model supports next languages:
