@@ -41,15 +41,23 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
-Before using the service you need to download MUSE model. You can do it using next command:
+Before using the service you need to:
+- download MUSE model with following command:
 ```
 python models/download_muse.py
 ```
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):
+```shell script
+export SECRET_KEY={SECRET_KEY}
+export JWT_SECRET_KEY={JWT_SECRET_KEY}
+```
+
+To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
 ```
-docker build -t muse_as_service .
+docker build --build-arg SECRET_KEY="${SECRET_KEY}" --build-arg JWT_SECRET_KEY="${JWT_SECRET_KEY}" -t muse_as_service .
 ```
 **NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service).
 
@@ -63,14 +71,6 @@ You can also launch a service without docker, but it is preferable to launch the
 - **Gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
-**NOTE**:<br>
-Before launching a service without docker, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
-```shell script
-export SECRET_KEY={SECRET_KEY}
-export JWT_SECRET_KEY={JWT_SECRET_KEY}
-```
-To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
-
 #### GPU support
 MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU).
 
@@ -81,9 +81,9 @@ You can set it up as environment variables with: `export CUDA_VISIBLE_DEVICES=0`
 **NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
 ### Usage
-Since the service is usually running on the server, it is important to restrict access to the service.<br>
+Since the service is usually running on the server, it is important to restrict access to the service.
 
-For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).<br>
+For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).
 
 Initially database has only one user with **username**: "admin" and **password**: "admin".<br>
 To add new user with `username` and `password` run:
@@ -179,14 +179,13 @@ To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
 Before running tests and code coverage, you need:
-- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`
-- run app.py in background
-
-You can do it with following commands:
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):
 ```shell script
 export SECRET_KEY=test
 export JWT_SECRET_KEY=test
-
+```
+- run `app.py` in background:
+```
 python app.py &
 ```
 
