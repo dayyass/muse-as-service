@@ -42,15 +42,10 @@ pip install --upgrade pip && pip install -r requirements.txt
 ```
 
 Before using the service you need to:
-- download MUSE model with following command:
-```
-python models/download_muse.py
-```
-- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):
-```shell script
-export SECRET_KEY={SECRET_KEY}
-export JWT_SECRET_KEY={JWT_SECRET_KEY}
-```
+- download MUSE model with following command:<br>
+`python models/download_muse.py`
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
+`export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}`
 
 To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
@@ -101,8 +96,8 @@ MUSE as Service has next endpoints:
 - /logout/access  - POST request to remove JWT access token (JWT access token required)
 - /logout/refresh - POST request to remove JWT refresh token (JWT refresh token required)
 - /token/refresh  - POST request to refresh JWT access token (JWT refresh token required)
-- /tokenize   - GET request for `sentence` tokenization (JWT access token required)
-- /embed      - GET request for `sentence` embedding (JWT access token required)
+- /tokenize       - GET request for `sentence` tokenization (JWT access token required)
+- /embed          - GET request for `sentence` embedding (JWT access token required)
 </pre>
 
 You can use python **requests** package to work with HTTP requests:
@@ -184,15 +179,10 @@ To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
 Before running tests and code coverage, you need:
-- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):
-```shell script
-export SECRET_KEY=test
-export JWT_SECRET_KEY=test
-```
-- run `app.py` in background:
-```
-python app.py &
-```
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
+`export SECRET_KEY=test JWT_SECRET_KEY=test`
+- run `app.py` in background:<br>
+`python app.py &`
 
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
 `python -m unittest discover`
