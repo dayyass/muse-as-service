@@ -36,8 +36,8 @@ class MUSEClient:
 
         self.url_service = f"http://{self.ip}:{self.port}"
 
-        self._access_token = None
-        self._refresh_token = None
+        self._access_token = ""
+        self._refresh_token = ""
 
     def login(self, username: str, password: str) -> None:
         """
@@ -68,6 +68,13 @@ class MUSEClient:
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
 
+        # JWT access token expiration handler
+        if (response.status_code == 401) and (
+            response.json()["msg"] == "Token has expired"
+        ):
+            self._token_refresh()
+            return
+
         if response.status_code != 200:
             raise requests.HTTPError(_http_error_message(response))
 
@@ -92,7 +99,7 @@ class MUSEClient:
         self._logout_access()
         self._logout_refresh()
 
-    def token_refresh(self) -> None:
+    def _token_refresh(self) -> None:
         """
         Refresh access token.
         """
@@ -122,6 +129,13 @@ class MUSEClient:
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
 
+        # JWT access token expiration handler
+        if (response.status_code == 401) and (
+            response.json()["msg"] == "Token has expired"
+        ):
+            self._token_refresh()
+            return self.tokenize(sentences)
+
         if response.status_code != 200:
             raise requests.HTTPError(_http_error_message(response))
         else:
@@ -141,6 +155,13 @@ class MUSEClient:
             params={"sentence": sentences},
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
+
+        # JWT access token expiration handler
+        if (response.status_code == 401) and (
+            response.json()["msg"] == "Token has expired"
+        ):
+            self._token_refresh()
+            return self.embed(sentences)
 
         if response.status_code != 200:
             raise requests.HTTPError(_http_error_message(response))
