@@ -66,11 +66,11 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=args["username"])
             refresh_token = create_refresh_token(identity=args["username"])
 
-            return jsonify(
-                message=f"Logged in as {current_user.username}",
-                access_token=access_token,
-                refresh_token=refresh_token,
-            )
+        return jsonify(
+            message=f"Logged in as {current_user.username}",
+            access_token=access_token,
+            refresh_token=refresh_token,
+        )
 
 
 class UserLogoutAccess(Resource):
