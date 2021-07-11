@@ -193,8 +193,10 @@ To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
 `coverage run -m unittest discover && coverage report -m`
 
-**NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with following command:<br>
-`kill $(ps aux | grep '[a]pp.py' | awk '{print $2}')`
+**NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with following command:
+```shell script
+kill $(ps aux | grep '[a]pp.py' | awk '{print $2}')
+```
 
 ### MUSE supported languages
 MUSE model supports next languages:
