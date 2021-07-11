@@ -57,7 +57,6 @@ Instead of using endpoints, listed above, directly, **MUSEClient** provides the 
 <pre>
 - login         - method to login with `username` and `password`
 - logout        - method to logout (login required)
-- token_refresh - method to refresh JWT access token (login required)
 - tokenize      - method for `sentence` tokenization (login required)
 - embed         - method for `sentence` embedding (login required)
 </pre>
