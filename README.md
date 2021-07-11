@@ -228,19 +228,19 @@ MUSE model supports next languages:
 - Arabic
 - Chinese-simplified
 - Chinese-traditional
+- Dutch
 - English
 - French
 - German
 - Italian
 - Japanese
 - Korean
-- Dutch
 - Polish
 - Portuguese
+- Russian
 - Spanish
 - Thai
 - Turkish
-- Russian
 
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:
