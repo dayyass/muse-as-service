@@ -1,6 +1,7 @@
 [![tests](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml)
 [![linter](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml)
 [![codecov](https://codecov.io/gh/dayyass/muse_as_service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse_as_service)
+[![python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://github.com/dayyass/muse_as_service#requirements)
 [![license](https://img.shields.io/github/license/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
 [![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/releases/latest)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
@@ -30,9 +31,10 @@ For efficient memory usage when working with MUSE model on several projects (sev
 
 This is what **MUSE as Service** made for! ❤️
 
-### Installation
-Python >= 3.7 **required**.
+### Requirements
+**Python >= 3.7**
 
+### Installation
 To install MUSE as Service run:
 ```shell script
 # clone repo (https/ssh)
