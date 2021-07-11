@@ -8,14 +8,13 @@ from muse_as_service import MUSEClient  # noqa: E402
 ip = "localhost"
 port = 5000
 
+sentences = ["This is sentence example.", "This is yet another sentence example."]
+
 # init client
 client = MUSEClient(ip=ip, port=port)
 
 # login
 client.login(username="admin", password="admin")
-
-# sentences
-sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 tokenized_sentence = client.tokenize(sentences)

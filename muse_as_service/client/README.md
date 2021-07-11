@@ -18,15 +18,14 @@ import requests
 ip = "localhost"
 port = 5000
 
+sentences = ["This is sentence example.", "This is yet another sentence example."]
+
 # login
 response = requests.post(
     url=f"http://{ip}:{port}/login",
     json={"username": "admin", "password": "admin"},
 )
 token = response.json()["access_token"]
-
-# sentences
-sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 response = requests.get(
@@ -71,14 +70,13 @@ from muse_as_service import MUSEClient
 ip = "localhost"
 port = 5000
 
+sentences = ["This is sentence example.", "This is yet another sentence example."]
+
 # init client
 client = MUSEClient(ip=ip, port=port)
 
 # login
 client.login(username="admin", password="admin")
-
-# sentences
-sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 tokenized_sentence = client.tokenize(sentences)

@@ -5,15 +5,14 @@ import requests
 ip = "localhost"
 port = 5000
 
+sentences = ["This is sentence example.", "This is yet another sentence example."]
+
 # login
 response = requests.post(
     url=f"http://{ip}:{port}/login",
     json={"username": "admin", "password": "admin"},
 )
 token = response.json()["access_token"]
-
-# sentences
-sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 response = requests.get(
