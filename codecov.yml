@@ -12,7 +12,7 @@ coverage:
       source:
         paths:
           - "muse_as_service/"
-        target: 100%
+        target: 90%
     patch:
       default:
         target: 75%
