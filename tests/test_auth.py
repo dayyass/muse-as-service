@@ -152,6 +152,22 @@ class TestAuth(flask_testing.TestCase):
         # init client
         client = MUSEClient(ip="localhost", port=5000)
 
+        # logout access token
+        try:
+            client._logout_access()
+        except requests.exceptions.HTTPError:
+            pass
+        except Exception:
+            raise Exception("Something went wrong.")
+
+        # logout refresh token
+        try:
+            client._logout_refresh()
+        except requests.exceptions.HTTPError:
+            pass
+        except Exception:
+            raise Exception("Something went wrong.")
+
         # logout
         try:
             client.logout()
