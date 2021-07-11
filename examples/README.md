@@ -10,6 +10,7 @@ python examples/usage_requests.py
 - `
 python examples/usage_client.py
 `
+
 **NOTE**: run it from parent directory `muse_as_service`
 
 **NOTE**: before run examples you need to launch a service!
