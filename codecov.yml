@@ -1,34 +1,18 @@
 codecov:
   require_ci_to_pass: yes
 
+ignore:
+  - "muse_as_service/utils.py"
+  - "muse_as_service/database/add_user.py"
+
 coverage:
-  precision: 2
-  round: down
-  range: "70...100"
   status:
     project:
       default: false
-      tests:
-        paths:
-          - "tests/"
-        target: 100%
       source:
         paths:
           - "muse_as_service/"
-        target: 50%
+        target: 95%
     patch:
       default:
-        target: 50%
-
-parsers:
-  gcov:
-    branch_detection:
-      conditional: yes
-      loop: yes
-      method: no
-      macro: no
-
-comment:
-  layout: "reach,diff,flags,files,footer"
-  behavior: default
-  require_changes: no
+        target: 75%

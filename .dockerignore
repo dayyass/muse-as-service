@@ -1,4 +1,5 @@
 **.DS_Store
+**.ipynb
 **.ipynb_checkpoints
 
 # cache
@@ -13,3 +14,7 @@
 venv
 .idea
 .git
+
+models/*
+!models/README.md
+!models/download_muse.py

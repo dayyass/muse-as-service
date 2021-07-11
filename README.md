@@ -1,6 +1,7 @@
 [![tests](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml)
 [![linter](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml)
 [![codecov](https://codecov.io/gh/dayyass/muse_as_service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse_as_service)
+[![python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://github.com/dayyass/muse_as_service#requirements)
 [![license](https://img.shields.io/github/license/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
 [![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/releases/latest)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
@@ -30,8 +31,12 @@ For efficient memory usage when working with MUSE model on several projects (sev
 
 This is what **MUSE as Service** made for! ❤️
 
+### Requirements
+**Python >= 3.7**
+
 ### Installation
-```
+To install MUSE as Service run:
+```shell script
 # clone repo (https/ssh)
 git clone https://github.com/dayyass/muse_as_service.git
 # git clone git@github.com:dayyass/muse_as_service.git
@@ -41,20 +46,27 @@ cd muse_as_service
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
-Before using the service you need to download MUSE model. You can do it using next script:
-```
-./models/download_muse.sh
-```
+Before using the service you need to:
+- download MUSE model with following command:<br>
+`
+python models/download_muse.py
+`
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
+`
+export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}
+`
+
+To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
-```
-docker build -t muse_as_service .
+```shell script
+docker build --build-arg SECRET_KEY="${SECRET_KEY}" --build-arg JWT_SECRET_KEY="${JWT_SECRET_KEY}" -t muse_as_service .
 ```
 **NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service).
 
 To launch the service (either locally or on a server) use a **docker container**:
-```
+```shell script
 docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_service
 ```
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
@@ -62,14 +74,6 @@ docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_ser
 You can also launch a service without docker, but it is preferable to launch the service inside the docker container:
 - **Gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
-
-**NOTE**:<br>
-Before launching a service without docker, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
-```shell script
-export SECRET_KEY={SECRET_KEY}
-export JWT_SECRET_KEY={JWT_SECRET_KEY}
-```
-To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
 #### GPU support
 MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU).
@@ -81,24 +85,29 @@ You can set it up as environment variables with: `export CUDA_VISIBLE_DEVICES=0`
 **NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
 ### Usage
-Since the service is usually running on the server, it is important to restrict access to the service.<br>
+Since the service is usually running on the server, it is important to restrict access to the service.
 
-For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).<br>
+For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).
 
-Initially database has only one user with **username**: "admin" and **password**: "admin".<br>
+Initially database has only one user with:
+- **username**: "admin"
+- **password**: "admin"
+
 To add new user with `username` and `password` run:
-```
+```shell script
 python muse_as_service/database/add_user.py --username {username} --password {password}
 ```
 **NOTE**: no passwords are stored in the database, only their hashes.
 
 MUSE as Service has next endpoints:
+<pre>
 - /login          - POST request with `username` and `password` to get JWT tokens (access and refresh)
 - /logout/access  - POST request to remove JWT access token (JWT access token required)
 - /logout/refresh - POST request to remove JWT refresh token (JWT refresh token required)
 - /token/refresh  - POST request to refresh JWT access token (JWT refresh token required)
-- **/tokenize**   - GET request for `sentence` tokenization (JWT access token required)
-- **/embed**      - GET request for `sentence` embedding (JWT access token required)
+- /tokenize       - GET request for `sentence` tokenization (JWT access token required)
+- /embed          - GET request for `sentence` embedding (JWT access token required)
+</pre>
 
 You can use python **requests** package to work with HTTP requests:
 ```python3
@@ -109,15 +118,14 @@ import requests
 ip = "localhost"
 port = 5000
 
+sentences = ["This is sentence example.", "This is yet another sentence example."]
+
 # login
 response = requests.post(
     url=f"http://{ip}:{port}/login",
-    data={"username": "admin", "password": "admin"},
+    json={"username": "admin", "password": "admin"},
 )
 token = response.json()["access_token"]
-
-# sentences
-sentences = ["This is sentence example.", "This is yet another sentence example."]
 
 # tokenizer
 response = requests.get(
@@ -143,7 +151,17 @@ print(tokenized_sentence)  # [
 print(embedding.shape)  # (2, 512)
 ```
 
-But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface:
+But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface.
+
+Instead of using endpoints, listed above, directly, **MUSEClient** provides the following methods to work with:
+<pre>
+- login         - method to login with `username` and `password`
+- logout        - method to logout (login required)
+- tokenize      - method for `sentence` tokenization (login required)
+- embed         - method for `sentence` embedding (login required)
+</pre>
+
+Usage example:
 ```python3
 from muse_as_service import MUSEClient
 
@@ -151,20 +169,22 @@ from muse_as_service import MUSEClient
 ip = "localhost"
 port = 5000
 
+sentences = ["This is sentence example.", "This is yet another sentence example."]
+
 # init client
 client = MUSEClient(ip=ip, port=port)
 
 # login
 client.login(username="admin", password="admin")
 
-# sentences
-sentences = ["This is sentence example.", "This is yet another sentence example."]
-
 # tokenizer
 tokenized_sentence = client.tokenize(sentences)
 
 # embedder
 embedding = client.embed(sentences)
+
+# logout
+client.logout()
 
 # results
 print(tokenized_sentence)  # [
@@ -176,38 +196,53 @@ print(embedding.shape)  # (2, 512)
 
 ### Tests
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
-`pre-commit install`
+`
+pre-commit install
+`
 
-Before running tests and code coverage, you need to set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY`:
-```shell script
-export SECRET_KEY=test
-export JWT_SECRET_KEY=test
-```
+Before running tests and code coverage, you need:
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
+`
+export SECRET_KEY=test JWT_SECRET_KEY=test
+`
+- run [app.py](https://github.com/dayyass/muse_as_service/blob/main/app.py) in background:<br>
+`
+python app.py &
+`
 
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
-`python -m unittest discover`
+`
+python -m unittest discover
+`
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
-`coverage run -m unittest discover && coverage report -m`
+`
+coverage run -m unittest discover && coverage report -m
+`
+
+**NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with following command:
+```shell script
+kill $(ps aux | grep '[a]pp.py' | awk '{print $2}')
+```
 
 ### MUSE supported languages
 MUSE model supports next languages:
 - Arabic
 - Chinese-simplified
 - Chinese-traditional
+- Dutch
 - English
 - French
 - German
 - Italian
 - Japanese
 - Korean
-- Dutch
 - Polish
 - Portuguese
+- Russian
 - Spanish
 - Thai
 - Turkish
-- Russian
 
 ### Citation
 If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:

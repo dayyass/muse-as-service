@@ -1,8 +1,10 @@
 *.DS_Store
+*.ipynb
 *.ipynb_checkpoints
 
 # cache
 *__pycache__
+**.mypy_cache
 *.cache
 
 # coverage
@@ -14,4 +16,4 @@ venv
 
 models/*
 !models/README.md
-!models/download_muse.sh
+!models/download_muse.py

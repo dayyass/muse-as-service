@@ -4,6 +4,7 @@ import flask_testing
 import numpy as np
 from flask import Flask
 
+from muse_as_service import MUSEClient
 from muse_as_service.app import app
 
 
@@ -41,7 +42,7 @@ class TestUsage(flask_testing.TestCase):
         # login
         response = self.client.post(
             "/login",
-            data={"username": "admin", "password": "admin"},
+            json={"username": "admin", "password": "admin"},
         )
         token = response.json["access_token"]
 
@@ -60,6 +61,30 @@ class TestUsage(flask_testing.TestCase):
             headers={"Authorization": f"Bearer {token}"},
         )
         embedding_pred = np.array(response.json["embedding"])
+
+        # tests
+        self.assertListEqual(tokenized_sentence_pred, self.tokenized_sentence_true)
+        self.assertEqual(embedding_pred.shape, self.embedding_true_shape)
+
+    def test_client(self) -> None:
+        """
+        Testing usage via built-in client.
+        """
+
+        # init client
+        client = MUSEClient(ip="localhost", port=5000)
+
+        # login
+        client.login(username="admin", password="admin")
+
+        # tokenizer
+        tokenized_sentence_pred = client.tokenize(self.sentences)
+
+        # embedder
+        embedding_pred = client.embed(self.sentences)
+
+        # logout
+        client.logout()
 
         # tests
         self.assertListEqual(tokenized_sentence_pred, self.tokenized_sentence_true)

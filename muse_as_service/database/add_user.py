@@ -1,8 +1,10 @@
 import sqlite3
+import sys
 from argparse import ArgumentParser
 from contextlib import closing
 
-from passlib.hash import pbkdf2_sha256 as sha256
+sys.path.append(".")
+from database import UserModel  # noqa: E402
 
 
 def get_argparse() -> ArgumentParser:
@@ -28,7 +30,7 @@ if __name__ == "__main__":
     parser = get_argparse()
     args = parser.parse_args()
 
-    insert_query = f'INSERT INTO users (username, password) VALUES ("{args.username}", "{sha256.hash(args.password)}");'
+    insert_query = f'INSERT INTO users (username, password) VALUES ("{args.username}", "{UserModel.generate_hash(args.password)}");'
 
     # sqlite
     with closing(sqlite3.connect("muse_as_service/database/app.db")) as conn:

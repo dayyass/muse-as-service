@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9']
+        python-version: ['3.7', '3.8', '3.9']
         os: [ubuntu-latest, macOS-latest]
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +26,13 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
-        ./models/download_muse.sh
+    - name: Launch Flask app
+      run: |
+        python models/download_muse.py
+        python app.py &
+      env:
+        SECRET_KEY: test
+        JWT_SECRET_KEY: test
     - name: Tests
       run: |
         python -m unittest discover

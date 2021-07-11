@@ -1,4 +1,5 @@
 {
+        "PROPAGATE_EXCEPTIONS": true,
         "SQLALCHEMY_DATABASE_URI": "sqlite:///database/app.db",
         "SQLALCHEMY_TRACK_MODIFICATIONS": false,
         "JWT_ACCESS_TOKEN_EXPIRES": 86400

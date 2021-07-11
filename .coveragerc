@@ -12,6 +12,7 @@ exclude_lines =
 
 omit =
     muse_as_service/utils.py
+    muse_as_service/database/add_user.py
 
 show_missing = True
 ignore_errors = False
