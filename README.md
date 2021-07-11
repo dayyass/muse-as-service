@@ -43,9 +43,13 @@ pip install --upgrade pip && pip install -r requirements.txt
 
 Before using the service you need to:
 - download MUSE model with following command:<br>
-`python models/download_muse.py`
+`
+python models/download_muse.py
+`
 - set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
-`export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}`
+`
+export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}
+`
 
 To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
@@ -190,19 +194,29 @@ print(embedding.shape)  # (2, 512)
 
 ### Tests
 To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
-`pre-commit install`
+`
+pre-commit install
+`
 
 Before running tests and code coverage, you need:
 - set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
-`export SECRET_KEY=test JWT_SECRET_KEY=test`
-- run `app.py` in background:<br>
-`python app.py &`
+`
+export SECRET_KEY=test JWT_SECRET_KEY=test
+`
+- run [app.py](https://github.com/dayyass/muse_as_service/blob/main/app.py) in background:<br>
+`
+python app.py &
+`
 
 To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
-`python -m unittest discover`
+`
+python -m unittest discover
+`
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
-`coverage run -m unittest discover && coverage report -m`
+`
+coverage run -m unittest discover && coverage report -m
+`
 
 **NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with following command:
 ```shell script
