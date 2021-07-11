@@ -36,7 +36,7 @@ class MUSEClient:
 
         response = requests.post(
             url=f"{self.url_service}/login",
-            data={"username": username, "password": password},
+            json={"username": username, "password": password},
         )
 
         if response.status_code != 200:

@@ -8,7 +8,7 @@ port = 5000
 # login
 response = requests.post(
     url=f"http://{ip}:{port}/login",
-    data={"username": "admin", "password": "admin"},
+    json={"username": "admin", "password": "admin"},
 )
 token = response.json()["access_token"]
 

@@ -42,7 +42,7 @@ class TestUsage(flask_testing.TestCase):
         # login
         response = self.client.post(
             "/login",
-            data={"username": "admin", "password": "admin"},
+            json={"username": "admin", "password": "admin"},
         )
         token = response.json["access_token"]
 

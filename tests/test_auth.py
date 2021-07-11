@@ -32,7 +32,7 @@ class TestAuth(flask_testing.TestCase):
         # login
         response = self.client.post(
             "/login",
-            data={"username": "admin", "password": "admin"},
+            json={"username": "admin", "password": "admin"},
         )
         access_token = response.json["access_token"]
         refresh_token = response.json["refresh_token"]
@@ -90,17 +90,17 @@ class TestAuth(flask_testing.TestCase):
         # login
         response_wrong_password = self.client.post(
             "/login",
-            data={"username": "admin", "password": "password"},
+            json={"username": "admin", "password": "password"},
         )
 
         response_wrong_username = self.client.post(
             "/login",
-            data={"username": "username", "password": "admin"},
+            json={"username": "username", "password": "admin"},
         )
 
         response_wrong_username_and_password = self.client.post(
             "/login",
-            data={"username": "username", "password": "password"},
+            json={"username": "username", "password": "password"},
         )
 
         # tests
