@@ -31,6 +31,9 @@ For efficient memory usage when working with MUSE model on several projects (sev
 This is what **MUSE as Service** made for! ❤️
 
 ### Installation
+Python >= 3.7 **required**.
+
+To install MUSE as Service run:
 ```shell script
 # clone repo (https/ssh)
 git clone https://github.com/dayyass/muse_as_service.git
