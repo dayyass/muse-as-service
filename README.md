@@ -31,7 +31,7 @@ For efficient memory usage when working with MUSE model on several projects (sev
 This is what **MUSE as Service** made for! ❤️
 
 ### Installation
-```
+```shell script
 # clone repo (https/ssh)
 git clone https://github.com/dayyass/muse_as_service.git
 # git clone git@github.com:dayyass/muse_as_service.git
@@ -42,22 +42,26 @@ pip install --upgrade pip && pip install -r requirements.txt
 ```
 
 Before using the service you need to:
-- download MUSE model with following command:<br>
-`python models/download_muse.py`
-- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
-`export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}`
+- download MUSE model with following command:
+```shell script
+python models/download_muse.py
+```
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):
+```shell script
+export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}
+```
 
 To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
-```
+```shell script
 docker build --build-arg SECRET_KEY="${SECRET_KEY}" --build-arg JWT_SECRET_KEY="${JWT_SECRET_KEY}" -t muse_as_service .
 ```
 **NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service).
 
 To launch the service (either locally or on a server) use a **docker container**:
-```
+```shell script
 docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_service
 ```
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
@@ -85,7 +89,7 @@ Initially database has only one user with:
 - **password**: "admin"
 
 To add new user with `username` and `password` run:
-```
+```shell script
 python muse_as_service/database/add_user.py --username {username} --password {password}
 ```
 **NOTE**: no passwords are stored in the database, only their hashes.
@@ -182,16 +186,24 @@ To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 `pre-commit install`
 
 Before running tests and code coverage, you need:
-- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
-`export SECRET_KEY=test JWT_SECRET_KEY=test`
-- run `app.py` in background:<br>
-`python app.py &`
+- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):
+```shell script
+export SECRET_KEY=test JWT_SECRET_KEY=test
+```
+- run `app.py` in background:
+```shell script
+python app.py &
+```
 
-To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
-`python -m unittest discover`
+To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:
+```shell script
+python -m unittest discover
+```
 
 To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
-`coverage run -m unittest discover && coverage report -m`
+```shell script
+coverage run -m unittest discover && coverage report -m
+```
 
 **NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with following command:
 ```shell script
