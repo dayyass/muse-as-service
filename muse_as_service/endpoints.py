@@ -3,7 +3,7 @@ from flask import Response, jsonify
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 
-from muse_as_service.muse_tokenizer.tokenizer import (
+from muse_as_service.tokenizer.tokenizer import (
     get_tokenizer_from_saved_model,
     parse_saved_model,
     tokenize,

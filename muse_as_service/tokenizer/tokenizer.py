@@ -7,10 +7,10 @@ from tensorflow_text.python.ops.sentencepiece_tokenizer import SentencepieceToke
 
 def get_tokenizer_from_saved_model(saved_model: SavedModel) -> SentencepieceTokenizer:
     """
-    Get muse_tokenizer from tf SavedModel.
+    Get tokenizer from tf SavedModel.
 
     :param SavedModel saved_model: tf SavedModel.
-    :return: muse_tokenizer.
+    :return: tokenizer.
     :rtype: SentencepieceTokenizer
     """
 
@@ -43,10 +43,10 @@ def tokenize(
     sentences: List[str], tokenizer: SentencepieceTokenizer, encoding: str = "utf-8"
 ) -> List[List[str]]:
     """
-    Tokenize sentence given muse_tokenizer.
+    Tokenize sentence given tokenizer.
 
     :param List[str] sentences: sentences to tokenize.
-    :param SentencepieceTokenizer tokenizer: muse_tokenizer.
+    :param SentencepieceTokenizer tokenizer: tokenizer.
     :param str encoding: encoding (default: "utf-8").
     :return: tokenized sentences.
     :rtype: List[List[str]]
