@@ -1,4 +1,3 @@
-import logging
 from argparse import ArgumentParser
 
 
@@ -28,17 +27,3 @@ def get_argparse() -> ArgumentParser:
     )
 
     return parser
-
-
-def get_logger() -> logging.Logger:
-    """
-    Helper function to get logger.
-
-    :return: logger.
-    :rtype: logging.Logger
-    """
-
-    logger = logging.getLogger("muse_as_service")
-    logger.setLevel(logging.INFO)
-
-    return logger
