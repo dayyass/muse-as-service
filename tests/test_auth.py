@@ -76,17 +76,11 @@ class TestAuth(flask_testing.TestCase):
         # login
         client.login(username="admin", password="admin")
 
-        # logout access token
-        client.logout_access()
-
         # token refresh
         client.token_refresh()
 
-        # logout access token
-        client.logout_access()
-
-        # logout refresh token
-        client.logout_refresh()
+        # logout
+        client.logout()
 
     def test_requests_access_denied(self) -> None:
         """
@@ -158,17 +152,9 @@ class TestAuth(flask_testing.TestCase):
         # init client
         client = MUSEClient(ip="localhost", port=5000)
 
-        # logout access token
+        # logout
         try:
-            client.logout_access()
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
-
-        # logout refresh token
-        try:
-            client.logout_refresh()
+            client.logout()
         except requests.exceptions.HTTPError:
             pass
         except Exception:

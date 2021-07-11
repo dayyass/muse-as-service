@@ -83,6 +83,9 @@ class TestUsage(flask_testing.TestCase):
         # embedder
         embedding_pred = client.embed(self.sentences)
 
+        # logout
+        client.logout()
+
         # tests
         self.assertListEqual(tokenized_sentence_pred, self.tokenized_sentence_true)
         self.assertEqual(embedding_pred.shape, self.embedding_true_shape)

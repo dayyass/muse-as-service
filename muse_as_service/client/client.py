@@ -45,7 +45,7 @@ class MUSEClient:
             self._access_token = response.json()["access_token"]
             self._refresh_token = response.json()["refresh_token"]
 
-    def logout_access(self) -> None:
+    def _logout_access(self) -> None:
         """
         Logout with access token.
         """
@@ -58,7 +58,7 @@ class MUSEClient:
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
 
-    def logout_refresh(self) -> None:
+    def _logout_refresh(self) -> None:
         """
         Logout with refresh token.
         """
@@ -70,6 +70,14 @@ class MUSEClient:
 
         if response.status_code != 200:
             raise requests.HTTPError(f"{response.status_code}: {response.text}")
+
+    def logout(self) -> None:
+        """
+        Logout with access and refresh tokens.
+        """
+
+        self._logout_access()
+        self._logout_refresh()
 
     def token_refresh(self) -> None:
         """

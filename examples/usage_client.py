@@ -23,6 +23,9 @@ tokenized_sentence = client.tokenize(sentences)
 # embedder
 embedding = client.embed(sentences)
 
+# logout
+client.logout()
+
 # results
 print(tokenized_sentence)  # [
 # ["▁This", "▁is", "▁sentence", "▁example", "."],
