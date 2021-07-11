@@ -2,6 +2,19 @@ from typing import List
 
 import numpy as np
 import requests
+from requests import Response
+
+
+def _http_error_message(response: Response) -> str:
+    """
+    Helper function to make requests.HTTPError message.
+
+    :param Response response: HTTP response.
+    :return: requests.HTTPError message.
+    :rtype: str
+    """
+
+    return f"{response.status_code}: {response.json()['msg']}"
 
 
 class MUSEClient:
@@ -40,7 +53,7 @@ class MUSEClient:
         )
 
         if response.status_code != 200:
-            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+            raise requests.HTTPError(_http_error_message(response))
         else:
             self._access_token = response.json()["access_token"]
             self._refresh_token = response.json()["refresh_token"]
@@ -56,7 +69,7 @@ class MUSEClient:
         )
 
         if response.status_code != 200:
-            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+            raise requests.HTTPError(_http_error_message(response))
 
     def _logout_refresh(self) -> None:
         """
@@ -69,7 +82,7 @@ class MUSEClient:
         )
 
         if response.status_code != 200:
-            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+            raise requests.HTTPError(_http_error_message(response))
 
     def logout(self) -> None:
         """
@@ -90,7 +103,7 @@ class MUSEClient:
         )
 
         if response.status_code != 200:
-            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+            raise requests.HTTPError(_http_error_message(response))
         else:
             self._access_token = response.json()["access_token"]
 
@@ -110,7 +123,7 @@ class MUSEClient:
         )
 
         if response.status_code != 200:
-            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+            raise requests.HTTPError(_http_error_message(response))
         else:
             return response.json()["tokens"]
 
@@ -130,6 +143,6 @@ class MUSEClient:
         )
 
         if response.status_code != 200:
-            raise requests.HTTPError(f"{response.status_code}: {response.text}")
+            raise requests.HTTPError(_http_error_message(response))
         else:
             return np.array(response.json()["embedding"])

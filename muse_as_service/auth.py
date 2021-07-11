@@ -19,7 +19,7 @@ def unauthorized() -> Response:
     :rtype: Response
     """
 
-    response = make_response(jsonify(message="Access denied!"), 401)
+    response = make_response(jsonify(msg="Unauthorized"), 401)
     response.headers["WWW-Authenticate"] = 'Basic realm="Login Required"'
 
     return response
