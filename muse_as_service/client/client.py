@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 import numpy as np
@@ -72,6 +73,7 @@ class MUSEClient:
         if (response.status_code == 401) and (
             response.json()["msg"] == "Token has expired"
         ):
+            logging.info("JWt access token has expired. Reissue access token.")
             return
 
         if response.status_code != 200:
@@ -132,6 +134,7 @@ class MUSEClient:
         if (response.status_code == 401) and (
             response.json()["msg"] == "Token has expired"
         ):
+            logging.info("JWt access token has expired. Reissue access token.")
             self._token_refresh()
             return self.tokenize(sentences)
 
@@ -159,6 +162,7 @@ class MUSEClient:
         if (response.status_code == 401) and (
             response.json()["msg"] == "Token has expired"
         ):
+            logging.info("JWt access token has expired. Reissue access token.")
             self._token_refresh()
             return self.embed(sentences)
 
