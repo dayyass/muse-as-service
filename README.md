@@ -143,7 +143,18 @@ print(tokenized_sentence)  # [
 print(embedding.shape)  # (2, 512)
 ```
 
-But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface:
+But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface.
+
+Instead of using endpoints, listed above, directly, **MUSEClient** provides the following methods to work with:
+<pre>
+- login          - method to login with `username` and `password`
+- logout         - method to logout (login required)
+- token_refresh  - method to refresh JWT access token (login required)
+- tokenize       - method for `sentence` tokenization (login required)
+- embed          - method for `sentence` embedding (login required)
+</pre>
+
+Usage example:
 ```python3
 from muse_as_service import MUSEClient
 
