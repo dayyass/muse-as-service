@@ -11,6 +11,7 @@ class UserModel(db.Model):
     """
 
     __tablename__ = "users"
+    __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
@@ -60,6 +61,7 @@ class RevokedTokenModel(db.Model):
     """
 
     __tablename__ = "revoked_tokens"
+    __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
     jti = db.Column(db.String(120))

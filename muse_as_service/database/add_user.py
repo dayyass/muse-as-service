@@ -1,8 +1,10 @@
 import sqlite3
+import sys
 from argparse import ArgumentParser
 from contextlib import closing
 
-from muse_as_service.database.database import UserModel
+sys.path.append(".")
+from database import UserModel  # noqa: E402
 
 
 def get_argparse() -> ArgumentParser:
