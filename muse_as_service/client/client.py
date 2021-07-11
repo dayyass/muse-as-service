@@ -72,7 +72,6 @@ class MUSEClient:
         if (response.status_code == 401) and (
             response.json()["msg"] == "Token has expired"
         ):
-            self._token_refresh()
             return
 
         if response.status_code != 200:

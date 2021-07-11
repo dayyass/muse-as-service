@@ -76,9 +76,6 @@ class TestAuth(flask_testing.TestCase):
         # login
         client.login(username="admin", password="admin")
 
-        # token refresh
-        client.token_refresh()
-
         # logout
         client.logout()
 
@@ -178,7 +175,7 @@ class TestAuth(flask_testing.TestCase):
 
         # token refresh
         try:
-            client.token_refresh()
+            client._token_refresh()
         except requests.exceptions.HTTPError:
             pass
         except Exception:
