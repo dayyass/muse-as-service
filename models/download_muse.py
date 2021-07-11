@@ -63,10 +63,13 @@ def unpack_tar(path: str, remove: bool = True, verbose: bool = True) -> None:
 
     path_without_extension = get_path_without_extension(path)
 
-    if not path_without_extension.exists():
-
+    if path_without_extension.exists():
         if verbose:
-            print("unpacking '.tar' model ...")
+            print("The model has already been downloaded.")
+
+    else:
+        if verbose:
+            print("Unpacking '.tar' model ...")
 
         # extract tar
         # https://stackoverflow.com/questions/6086603/statement-with-and-tarfile
@@ -95,7 +98,7 @@ def download_thhub_tar_model(
     ):
 
         if verbose:
-            print("downloading '.tar' model ...")
+            print("Downloading '.tar' model ...")
 
         # download compressed model
         response = requests.get(f"{thhub_model_url}?tf-hub-format=compressed")
