@@ -4,6 +4,9 @@ from argparse import ArgumentParser
 def get_argparse() -> ArgumentParser:
     """
     Helper function to get ArgumentParser.
+
+    :return: parser.
+    :rtype: ArgumentParser
     """
 
     parser = ArgumentParser()

@@ -132,6 +132,7 @@ class MUSEClient:
         if (response.status_code == 401) and (
             response.json()["msg"] == "Token has expired"
         ):
+            print("JWT access token has expired. Reissue access token.")
             self._token_refresh()
             return self.tokenize(sentences)
 
@@ -159,6 +160,7 @@ class MUSEClient:
         if (response.status_code == 401) and (
             response.json()["msg"] == "Token has expired"
         ):
+            print("JWT access token has expired. Reissue access token.")
             self._token_refresh()
             return self.embed(sentences)
 

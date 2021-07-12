@@ -5,11 +5,11 @@ COPY . .
 
 # environment variables
 ARG SECRET_KEY
-RUN test -n "$SECRET_KEY"
+RUN test -n "$SECRET_KEY"  # mandating the variable to be passed as the build time argument
 ENV SECRET_KEY=$SECRET_KEY
 
 ARG JWT_SECRET_KEY
-RUN test -n "$SECRET_KEY"
+RUN test -n "$SECRET_KEY"  # mandating the variable to be passed as the build time argument
 ENV JWT_SECRET_KEY=$JWT_SECRET_KEY
 
 # instal dependencies
