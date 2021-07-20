@@ -8,6 +8,6 @@ gunicorn==20.1.0
 passlib==1.7.4
 pre-commit==2.13.0
 requests==2.25.1
+tensorflow==2.3.0
 tensorflow-hub==0.12.0
-tensorflow-text>=2.0.0
-tensorflow>=2.0.0
+tensorflow-text==2.3.0
