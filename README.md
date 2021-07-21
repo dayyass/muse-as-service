@@ -43,6 +43,8 @@ git clone https://github.com/dayyass/muse_as_service.git
 
 # install dependencies (preferable in venv)
 cd muse_as_service
+python3 -m venv venv
+source venv/bin/activate
 pip install --upgrade pip && pip install -r requirements.txt
 ```
 
@@ -58,6 +60,11 @@ export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}
 
 To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
+For testing purposes you can use:
+`
+export SECRET_KEY=test JWT_SECRET_KEY=test
+`
+
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
 ```shell script
@@ -72,17 +79,22 @@ docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_ser
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
 
 You can also launch a service without docker, but it is preferable to launch the service inside the docker container:
-- **Gunicorn**: `./gunicorn.sh` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
+- **Gunicorn**: `gunicorn --config gunicorn.conf.py app:app` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
+**NOTE**: it is also possible to launch the service using [**systemd**](https://en.wikipedia.org/wiki/Systemd)
+
 #### GPU support
-MUSE as Service supports **GPU** inference. To launch the service with GPU support use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (`CUDA_VISIBLE_DEVICES=""` disables GPU support and uses only CPU).
+MUSE as Service supports **GPU** inference. To launch the service with GPU support you need:
+- install [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+- use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (if needed)
+- launch the service with `docker run` command above (after `docker build`) with `--gpus all` parameter
 
 You can set it up as environment variables with: `export CUDA_VISIBLE_DEVICES=0`
 
-**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated. Therefore `tensorflow>=2.0.0` is placed in [requirements.txt](https://github.com/dayyass/muse_as_service/blob/main/requirements.txt).
+**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated.
 
-**NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions. See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
+**NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions (default version `tensorflow==2.3.0` supports `CUDA 10.1`). See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
 ### Usage
 Since the service is usually running on the server, it is important to restrict access to the service.
