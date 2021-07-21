@@ -3,6 +3,7 @@ from typing import List
 from tensorflow.core.protobuf.saved_model_pb2 import SavedModel
 from tensorflow.python.saved_model.loader_impl import parse_saved_model  # noqa: F401
 from tensorflow_text.python.ops.sentencepiece_tokenizer import SentencepieceTokenizer
+from tqdm import tqdm
 
 
 def get_tokenizer_from_saved_model(saved_model: SavedModel) -> SentencepieceTokenizer:
@@ -40,7 +41,10 @@ def get_tokenizer_from_saved_model(saved_model: SavedModel) -> SentencepieceToke
 
 
 def tokenize(
-    sentences: List[str], tokenizer: SentencepieceTokenizer, encoding: str = "utf-8"
+    sentences: List[str],
+    tokenizer: SentencepieceTokenizer,
+    encoding: str = "utf-8",
+    verbose: bool = False,
 ) -> List[List[str]]:
     """
     Tokenize sentence given tokenizer.
@@ -48,11 +52,15 @@ def tokenize(
     :param List[str] sentences: sentences to tokenize.
     :param SentencepieceTokenizer tokenizer: tokenizer.
     :param str encoding: encoding (default: "utf-8").
+    :param bool verbose: add tqdm bar (default: False).
     :return: tokenized sentences.
     :rtype: List[List[str]]
     """
 
     tokenized_sentences_list = []
+
+    if verbose:
+        sentences = tqdm(sentences)
 
     for sentence in sentences:
         tokenized_sentence = []

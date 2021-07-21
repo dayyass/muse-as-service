@@ -90,5 +90,6 @@ class Tokenizer(Resource):
         tokenized_sentence = tokenize(
             sentences=args["sentence"],
             tokenizer=self.tokenizer,
+            verbose=True,
         )
         return jsonify(tokens=tokenized_sentence)
