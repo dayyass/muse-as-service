@@ -8,11 +8,11 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### What is MUSE?
-**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension ([16 languages](https://github.com/dayyass/muse_as_service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
+**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (supports [16 languages](https://github.com/dayyass/muse_as_service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
 MUSE model encodes sentences into embedding vectors of fixed size.
 
-- MUSE paper: [link](https://arxiv.org/abs/1907.04307)
-- USE paper: [link](https://arxiv.org/abs/1803.11175)
+- MUSE [paper](https://arxiv.org/abs/1907.04307)
+- USE [paper](https://arxiv.org/abs/1803.11175)
 
 ### What is MUSE as Service?
 MUSE as Service is the **REST API** for sentence tokenization and embedding using MUSE model from [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder-multilingual/3).
@@ -32,7 +32,7 @@ For efficient memory usage when working with MUSE model on several projects (sev
 This is what **MUSE as Service** made for! ❤️
 
 ### Requirements
-**Python >= 3.7**
+Python >= 3.7
 
 ### Installation
 To install MUSE as Service run:
@@ -60,7 +60,7 @@ export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}
 
 To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
 
-For testing purposes you can use:
+For testing purposes you can use:<br>
 `
 export SECRET_KEY=test JWT_SECRET_KEY=test
 `
@@ -82,15 +82,13 @@ You can also launch a service without docker, but it is preferable to launch the
 - **Gunicorn**: `gunicorn --config gunicorn.conf.py app:app` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
-**NOTE**: it is also possible to launch the service using [**systemd**](https://en.wikipedia.org/wiki/Systemd)
+It is also possible to launch the service using [**systemd**](https://en.wikipedia.org/wiki/Systemd)
 
 #### GPU support
 MUSE as Service supports **GPU** inference. To launch the service with GPU support you need:
 - install [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
-- use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device (if needed)
+- use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device if needed (e.g. `export CUDA_VISIBLE_DEVICES=0`)
 - launch the service with `docker run` command above (after `docker build`) with `--gpus all` parameter
-
-You can set it up as environment variables with: `export CUDA_VISIBLE_DEVICES=0`
 
 **NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated.
 
@@ -113,12 +111,12 @@ python muse_as_service/database/add_user.py --username {username} --password {pa
 
 MUSE as Service has next endpoints:
 <pre>
-- /login          - POST request with `username` and `password` to get JWT tokens (access and refresh)
-- /logout/access  - POST request to remove JWT access token (JWT access token required)
-- /logout/refresh - POST request to remove JWT refresh token (JWT refresh token required)
-- /token/refresh  - POST request to refresh JWT access token (JWT refresh token required)
-- /tokenize       - GET request for `sentence` tokenization (JWT access token required)
-- /embed          - GET request for `sentence` embedding (JWT access token required)
+- /login          - POST request with `username` and `password` to get tokens (access and refresh)
+- /logout/access  - POST request to remove access token (access token required)
+- /logout/refresh - POST request to remove refresh token (refresh token required)
+- /token/refresh  - POST request to refresh access token (refresh token required)
+- /tokenize       - GET request for `sentence` tokenization (access token required)
+- /embed          - GET request for `sentence` embedding (access token required)
 </pre>
 
 You can use python **requests** package to work with HTTP requests:
