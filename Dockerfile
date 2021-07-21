@@ -1,4 +1,4 @@
-FROM python:3.9.5-slim-buster
+FROM python:3.7-slim-buster
 MAINTAINER Dani El-Ayyass <dayyass@yandex.ru>
 WORKDIR /app
 COPY . .
@@ -19,5 +19,4 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 RUN python models/download_muse.py
 
 # run gunicorn server
-RUN chmod 777 gunicorn.sh
-CMD ./gunicorn.sh
+CMD gunicorn --config gunicorn.conf.py app:app
