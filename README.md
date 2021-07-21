@@ -29,7 +29,7 @@ These packages take up more than **1GB** of memory. The model itself takes up **
 
 For efficient memory usage when working with MUSE model on several projects (several virtual environments) or/and with teammates (several model copies on different computers) it is better to deploy one instance of the model in one virtual environment where all teammates have access to.
 
-This is what **MUSE as Service** made for! ❤️
+This is what **MUSE as Service** is made for! ❤️
 
 ### Requirements
 Python >= 3.7
@@ -78,7 +78,7 @@ docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_ser
 ```
 **NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
 
-You can also launch a service without docker, but it is preferable to launch the service inside the docker container:
+You can also launch the service without docker, but it is preferable to launch the service inside the docker container:
 - **Gunicorn**: `gunicorn --config gunicorn.conf.py app:app` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
@@ -90,12 +90,12 @@ MUSE as Service supports **GPU** inference. To launch the service with GPU suppo
 - use `CUDA_VISIBLE_DEVICES` environment variable to specify GPU device if needed (e.g. `export CUDA_VISIBLE_DEVICES=0`)
 - launch the service with `docker run` command above (after `docker build`) with `--gpus all` parameter
 
-**NOTE**: from **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are not separated.
+**NOTE**: since **TensorFlow2.0** `tensorflow` and `tensorflow-gpu` packages are merged.
 
-**NOTE**: depending on installed **CUDA** version you may need different `tensorflow` versions (default version `tensorflow==2.3.0` supports `CUDA 10.1`). See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
+**NOTE**: depending on **CUDA** version installed you may need different `tensorflow` versions (default version `tensorflow==2.3.0` supports `CUDA 10.1`). See [table](https://www.tensorflow.org/install/source#gpu) with TF/CUDA compatibility to choose the right one and `pip install` it.
 
 ### Usage
-Since the service is usually running on the server, it is important to restrict access to the service.
+Since the service is usually running on server, it is important to restrict access to the service.
 
 For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).
 
@@ -109,7 +109,7 @@ python muse_as_service/database/add_user.py --username {username} --password {pa
 ```
 **NOTE**: no passwords are stored in the database, only their hashes.
 
-MUSE as Service has next endpoints:
+MUSE as Service has the following endpoints:
 <pre>
 - /login          - POST request with `username` and `password` to get tokens (access and refresh)
 - /logout/access  - POST request to remove access token (access token required)
@@ -161,7 +161,7 @@ print(tokenized_sentence)  # [
 print(embedding.shape)  # (2, 512)
 ```
 
-But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface.
+However it is better to use built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides user with a simpler interface.
 
 Instead of using endpoints, listed above, directly, **MUSEClient** provides the following methods to work with:
 <pre>
@@ -210,7 +210,7 @@ To use [**pre-commit**](https://pre-commit.com) hooks run:<br>
 pre-commit install
 `
 
-Before running tests and code coverage, you need:
+Before running tests and code coverage, you need to:
 - set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
 `
 export SECRET_KEY=test JWT_SECRET_KEY=test
