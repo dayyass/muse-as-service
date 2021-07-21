@@ -2,13 +2,15 @@ from flask import Response, abort, jsonify, make_response
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
-    get_jwt,
     get_jwt_identity,
     jwt_required,
+    set_access_cookies,
+    set_refresh_cookies,
+    unset_jwt_cookies,
 )
 from flask_restful import Resource, reqparse
 
-from muse_as_service.database.database import RevokedTokenModel, UserModel
+from muse_as_service.database.database import UserModel
 
 
 def unauthorized() -> Response:
@@ -66,43 +68,26 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=args["username"])
             refresh_token = create_refresh_token(identity=args["username"])
 
-        return jsonify(
-            message=f"Logged in as {current_user.username}",
-            access_token=access_token,
-            refresh_token=refresh_token,
-        )
+            response = jsonify(message="Logged in")
+
+            # set cookies
+            set_access_cookies(response, access_token)
+            set_refresh_cookies(response, refresh_token)
+
+            return response
 
 
-class UserLogoutAccess(Resource):
+class UserLogout(Resource):
     """
     User logout API resource.
     """
 
-    @jwt_required()
     def post(self) -> Response:
 
-        jti = get_jwt()["jti"]
+        response = jsonify(message="Logged out")
+        unset_jwt_cookies(response)
 
-        revoked_token = RevokedTokenModel(jti=jti)
-        revoked_token.add()
-
-        return jsonify(message="Access token has been revoked")
-
-
-class UserLogoutRefresh(Resource):
-    """
-    User logout API resource.
-    """
-
-    @jwt_required(refresh=True)
-    def post(self) -> Response:
-
-        jti = get_jwt()["jti"]
-
-        revoked_token = RevokedTokenModel(jti=jti)
-        revoked_token.add()
-
-        return jsonify(message="Refresh token has been revoked")
+        return response
 
 
 class TokenRefresh(Resource):
@@ -116,6 +101,8 @@ class TokenRefresh(Resource):
         current_user = get_jwt_identity()
         access_token = create_access_token(identity=current_user)
 
-        return jsonify(
-            message="Access token has been refreshed", access_token=access_token
-        )
+        response = jsonify(message="Access token has been refreshed")
+
+        set_access_cookies(response, access_token)
+
+        return response
