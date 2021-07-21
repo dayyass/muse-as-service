@@ -53,35 +53,3 @@ class UserModel(db.Model):
         """
 
         return cls.query.filter_by(username=username).first()
-
-
-class RevokedTokenModel(db.Model):
-    """
-    SQLAlchemy model for revoked tokens.
-    """
-
-    __tablename__ = "revoked_tokens"
-    __table_args__ = {"extend_existing": True}
-
-    id = db.Column(db.Integer, primary_key=True)
-    jti = db.Column(db.String(120))
-
-    def add(self) -> None:
-        """
-        Add and commit token to database.
-        """
-        db.session.add(self)
-        db.session.commit()
-
-    @classmethod
-    def is_jti_blocklisted(cls, jti: str) -> bool:
-        """
-        Check if jti unique identifier of the token in blocklist.
-
-        :param str jti: jti unique identifier of the token.
-        :return: is jti in blocklist.
-        :rtype: bool
-        """
-
-        query = cls.query.filter_by(jti=jti).first()
-        return bool(query)
