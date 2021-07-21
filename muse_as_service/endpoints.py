@@ -2,7 +2,6 @@ import tensorflow_hub as hub
 from flask import Response, jsonify
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
-from tqdm import tqdm
 
 from muse_as_service.tokenizer.tokenizer import (
     get_tokenizer_from_saved_model,
@@ -58,7 +57,7 @@ class Embedder(Resource):
         parser = get_sentence_parser()
         args = parser.parse_args()
 
-        embedding = self.embedder(tqdm(args["sentence"])).numpy().tolist()
+        embedding = self.embedder(args["sentence"]).numpy().tolist()
         return jsonify(embedding=embedding)
 
 
@@ -89,7 +88,8 @@ class Tokenizer(Resource):
         args = parser.parse_args()
 
         tokenized_sentence = tokenize(
-            sentences=tqdm(args["sentence"]),
+            sentences=args["sentence"],
             tokenizer=self.tokenizer,
+            verbose=True,
         )
         return jsonify(tokens=tokenized_sentence)
