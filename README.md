@@ -82,7 +82,7 @@ You can also launch a service without docker, but it is preferable to launch the
 - **Gunicorn**: `gunicorn --config gunicorn.conf.py app:app` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
-It is also possible to launch the service using [**systemd**](https://en.wikipedia.org/wiki/Systemd)
+It is also possible to launch the service using [**systemd**](https://en.wikipedia.org/wiki/Systemd).
 
 #### GPU support
 MUSE as Service supports **GPU** inference. To launch the service with GPU support you need:
