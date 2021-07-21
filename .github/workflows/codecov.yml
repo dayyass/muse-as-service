@@ -17,10 +17,10 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@master
-    - name: Setup Python
+    - name: Set up Python
       uses: actions/setup-python@master
       with:
-        python-version: 3.8
+        python-version: 3.7
     - name: Install dependencies
       run: |
         pip install --upgrade pip
