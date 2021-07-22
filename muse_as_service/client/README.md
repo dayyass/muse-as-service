@@ -1,12 +1,11 @@
 ### Client
-MUSE as Service has next endpoints:
+MUSE as Service has the following endpoints:
 <pre>
-- /login          - POST request with `username` and `password` to get JWT tokens (access and refresh)
-- /logout/access  - POST request to remove JWT access token (JWT access token required)
-- /logout/refresh - POST request to remove JWT refresh token (JWT refresh token required)
-- /token/refresh  - POST request to refresh JWT access token (JWT refresh token required)
-- /tokenize       - GET request for `sentence` tokenization (JWT access token required)
-- /embed          - GET request for `sentence` embedding (JWT access token required)
+- /login          - POST request with `username` and `password` to get tokens (access and refresh)
+- /logout         - POST request to remove tokens (access and refresh)
+- /token/refresh  - POST request to refresh access token (refresh token required)
+- /tokenize       - GET request for `sentence` tokenization (access token required)
+- /embed          - GET request for `sentence` embedding (access token required)
 </pre>
 
 You can use python **requests** package to work with HTTP requests:
@@ -20,28 +19,36 @@ port = 5000
 
 sentences = ["This is sentence example.", "This is yet another sentence example."]
 
+# start session
+session = requests.Session()
+
 # login
-response = requests.post(
+response = session.post(
     url=f"http://{ip}:{port}/login",
     json={"username": "admin", "password": "admin"},
 )
-token = response.json()["access_token"]
 
 # tokenizer
-response = requests.get(
+response = session.get(
     url=f"http://{ip}:{port}/tokenize",
     params={"sentence": sentences},
-    headers={"Authorization": f"Bearer {token}"},
 )
 tokenized_sentence = response.json()["tokens"]
 
 # embedder
-response = requests.get(
+response = session.get(
     url=f"http://{ip}:{port}/embed",
     params={"sentence": sentences},
-    headers={"Authorization": f"Bearer {token}"},
 )
 embedding = np.array(response.json()["embedding"])
+
+# logout
+response = session.post(
+    url=f"http://{ip}:{port}/logout",
+)
+
+# close session
+session.close()
 
 # results
 print(tokenized_sentence)  # [
@@ -51,7 +58,7 @@ print(tokenized_sentence)  # [
 print(embedding.shape)  # (2, 512)
 ```
 
-But it is better to use the built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides a user with a simpler interface.
+However it is better to use built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides user with a simpler interface.
 
 Instead of using endpoints, listed above, directly, **MUSEClient** provides the following methods to work with:
 <pre>
