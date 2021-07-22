@@ -1,69 +1,85 @@
 import unittest
 
-import flask_testing
 import requests
-from flask import Flask
 
 from muse_as_service import MUSEClient
-from muse_as_service.app import app
 
 
-class TestAuth(flask_testing.TestCase):
+class TestAuth(unittest.TestCase):
     """
     Class for testing authorization.
     """
 
-    def create_app(self) -> Flask:
-        """
-        Create Flask app for testing.
+    ip = "localhost"
+    port = 5000
 
-        :return: Flask app.
-        :rtype: Flask
+    def exception_block(self, client: MUSEClient, method_name: str, **kwargs) -> None:
+        """
+        Exception block for errors testing.
+
+        :param MUSEClient client: MUSEClient.
+        :param str method_name: method name.
+        :param kwargs: kwargs.
         """
 
-        app.config["TESTING"] = True
-        return app
+        method = getattr(client, method_name)
+
+        try:
+            method(**kwargs)
+            self.assertTrue(False)
+        except requests.exceptions.HTTPError:
+            self.assertTrue(True)
+        except Exception:
+            self.assertTrue(False)
 
     def test_requests(self) -> None:
         """
         Testing authorization via requests library.
         """
 
+        # start session
+        session = requests.Session()
+
+        self.assertTrue("access_token_cookie" not in session.cookies)
+        self.assertTrue("refresh_token_cookie" not in session.cookies)
+
         # login
-        response = self.client.post(
-            "/login",
+        response = session.post(
+            url=f"http://{self.ip}:{self.port}/login",
             json={"username": "admin", "password": "admin"},
         )
-        access_token = response.json["access_token"]
-        refresh_token = response.json["refresh_token"]
 
-        # logout access token
-        response = self.client.post(
-            "/logout/access",
-            headers={"Authorization": f"Bearer {access_token}"},
-        )
         self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(session.cookies, requests.cookies.RequestsCookieJar)
+        self.assertTrue("access_token_cookie" in session.cookies)
+        self.assertTrue("refresh_token_cookie" in session.cookies)
+
+        access_token = session.cookies["access_token_cookie"]
 
         # token refresh
-        response = self.client.post(
-            "/token/refresh",
-            headers={"Authorization": f"Bearer {refresh_token}"},
+        response = session.post(
+            url=f"http://{self.ip}:{self.port}/token/refresh",
         )
-        access_token = response.json["access_token"]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("access_token_cookie" in session.cookies)
+        self.assertTrue("refresh_token_cookie" in session.cookies)
+
+        new_access_token = session.cookies["access_token_cookie"]
+
+        self.assertNotEqual(access_token, new_access_token)
 
         # logout access token
-        response = self.client.post(
-            "/logout/access",
-            headers={"Authorization": f"Bearer {access_token}"},
+        response = session.post(
+            url=f"http://{self.ip}:{self.port}/logout",
         )
-        self.assertEqual(response.status_code, 200)
 
-        # logout refresh token
-        response = self.client.post(
-            "/logout/refresh",
-            headers={"Authorization": f"Bearer {refresh_token}"},
-        )
         self.assertEqual(response.status_code, 200)
+        self.assertTrue("access_token_cookie" not in session.cookies)
+        self.assertTrue("refresh_token_cookie" not in session.cookies)
+
+        # close session
+        session.close()
 
     def test_client(self) -> None:
         """
@@ -71,7 +87,7 @@ class TestAuth(flask_testing.TestCase):
         """
 
         # init client
-        client = MUSEClient(ip="localhost", port=5000)
+        client = MUSEClient(ip=self.ip, port=self.port)
 
         # login
         client.login(username="admin", password="admin")
@@ -84,23 +100,35 @@ class TestAuth(flask_testing.TestCase):
         Testing 401 HTTP error handler via requests library.
         """
 
+        # start session
+        session = requests.Session()
+
+        # logout
+        response_logout_before_login = session.post(
+            url=f"http://{self.ip}:{self.port}/logout",
+        )
+
         # login
-        response_wrong_password = self.client.post(
-            "/login",
+        response_wrong_password = session.post(
+            url=f"http://{self.ip}:{self.port}/login",
             json={"username": "admin", "password": "password"},
         )
 
-        response_wrong_username = self.client.post(
-            "/login",
+        response_wrong_username = session.post(
+            url=f"http://{self.ip}:{self.port}/login",
             json={"username": "username", "password": "admin"},
         )
 
-        response_wrong_username_and_password = self.client.post(
-            "/login",
+        response_wrong_username_and_password = session.post(
+            url=f"http://{self.ip}:{self.port}/login",
             json={"username": "username", "password": "password"},
         )
 
+        # close session
+        session.close()
+
         # tests
+        self.assertEqual(response_logout_before_login.status_code, 200)
         self.assertEqual(response_wrong_password.status_code, 401)
         self.assertEqual(response_wrong_username.status_code, 401)
         self.assertEqual(response_wrong_username_and_password.status_code, 401)
@@ -111,29 +139,18 @@ class TestAuth(flask_testing.TestCase):
         """
 
         # init client
-        client = MUSEClient(ip="localhost", port=5000)
+        client = MUSEClient(ip=self.ip, port=self.port)
 
         # login
-        try:
-            client.login(username="admin", password="password")
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
-
-        try:
-            client.login(username="username", password="admin")
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
-
-        try:
-            client.login(username="username", password="password")
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
+        self.exception_block(
+            client, method_name="login", username="admin", password="password"
+        )
+        self.exception_block(
+            client, method_name="login", username="username", password="admin"
+        )
+        self.exception_block(
+            client, method_name="login", username="username", password="password"
+        )
 
     def test_client_errors(self) -> None:
         """
@@ -147,55 +164,19 @@ class TestAuth(flask_testing.TestCase):
         ]
 
         # init client
-        client = MUSEClient(ip="localhost", port=5000)
-
-        # logout access token
-        try:
-            client._logout_access()
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
-
-        # logout refresh token
-        try:
-            client._logout_refresh()
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
+        client = MUSEClient(ip=self.ip, port=self.port)
 
         # logout
-        try:
-            client.logout()
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
+        client.logout()
 
         # token refresh
-        try:
-            client._token_refresh()
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
+        self.exception_block(client, method_name="_token_refresh")
 
         # tokenizer
-        try:
-            client.tokenize(sentences)
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
+        self.exception_block(client, method_name="tokenize", sentences=sentences)
 
         # embedder
-        try:
-            client.embed(sentences)
-        except requests.exceptions.HTTPError:
-            pass
-        except Exception:
-            raise Exception("Something went wrong.")
+        self.exception_block(client, method_name="embed", sentences=sentences)
 
 
 if __name__ == "__main__":

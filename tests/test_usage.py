@@ -1,17 +1,18 @@
 import unittest
 
-import flask_testing
 import numpy as np
-from flask import Flask
+import requests
 
 from muse_as_service import MUSEClient
-from muse_as_service.app import app
 
 
-class TestUsage(flask_testing.TestCase):
+class TestUsage(unittest.TestCase):
     """
     Class for testing usage via requests library and built-in client.
     """
+
+    ip = "localhost"
+    port = 5000
 
     sentences = ["This is sentence example.", "This is yet another sentence example."]
 
@@ -21,46 +22,51 @@ class TestUsage(flask_testing.TestCase):
     ]
     embedding_true_shape = (2, 512)
 
-    def create_app(self) -> Flask:
-        """
-        Create Flask app for testing.
-
-        :return: Flask app.
-        :rtype: Flask
-        """
-
-        app.config["TESTING"] = True
-        return app
-
     def test_requests(self) -> None:
         """
         Testing usage via requests library.
         """
 
-        query_string = {"sentence": self.sentences}
+        # start session
+        session = requests.Session()
 
         # login
-        response = self.client.post(
-            "/login",
+        response = session.post(
+            f"http://{self.ip}:{self.port}/login",
             json={"username": "admin", "password": "admin"},
         )
-        token = response.json["access_token"]
+
+        self.assertEqual(response.status_code, 200)
 
         # tokenizer
-        response = self.client.get(
-            "/tokenize",
-            query_string=query_string,
-            headers={"Authorization": f"Bearer {token}"},
+        response = session.get(
+            f"http://{self.ip}:{self.port}/tokenize",
+            params={"sentence": self.sentences},
         )
-        tokenized_sentence_pred = response.json["tokens"]
+
+        self.assertEqual(response.status_code, 200)
+
+        tokenized_sentence_pred = response.json()["tokens"]
 
         # embedder
-        response = self.client.get(
-            "/embed",
-            query_string=query_string,
-            headers={"Authorization": f"Bearer {token}"},
+        response = session.get(
+            f"http://{self.ip}:{self.port}/embed",
+            params={"sentence": self.sentences},
         )
-        embedding_pred = np.array(response.json["embedding"])
+
+        self.assertEqual(response.status_code, 200)
+
+        embedding_pred = np.array(response.json()["embedding"])
+
+        # logout
+        response = session.post(
+            url=f"http://{self.ip}:{self.port}/logout",
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # close session
+        session.close()
 
         # tests
         self.assertListEqual(tokenized_sentence_pred, self.tokenized_sentence_true)
@@ -72,7 +78,7 @@ class TestUsage(flask_testing.TestCase):
         """
 
         # init client
-        client = MUSEClient(ip="localhost", port=5000)
+        client = MUSEClient(ip=self.ip, port=self.port)
 
         # login
         client.login(username="admin", password="admin")
