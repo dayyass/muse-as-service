@@ -57,7 +57,7 @@ python models/download_muse.py
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
 ```shell script
-docker build --build-arg SECRET_KEY="${SECRET_KEY}" --build-arg JWT_SECRET_KEY="${JWT_SECRET_KEY}" -t muse_as_service .
+docker build -t muse_as_service .
 ```
 **NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service).
 
@@ -97,6 +97,11 @@ To add new user with `username` and `password` run:
 python muse_as_service/database/add_user.py --username {username} --password {password}
 ```
 **NOTE**: no passwords are stored in the database, only their hashes.
+
+To remove the user with `username` run:
+```shell script
+python muse_as_service/database/remove_user.py --username {username}
+```
 
 MUSE as Service has the following endpoints:
 <pre>
