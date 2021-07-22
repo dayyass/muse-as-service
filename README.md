@@ -49,26 +49,15 @@ pip install --upgrade pip && pip install -r requirements.txt
 ```
 
 Before using the service you need to:
-- download MUSE model with following command:<br>
+- download MUSE model executing the following command:<br>
 `
 python models/download_muse.py
-`
-- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
-`
-export SECRET_KEY={SECRET_KEY} JWT_SECRET_KEY={JWT_SECRET_KEY}
-`
-
-To generate these keys you can use [this](https://stackoverflow.com/questions/34902378/where-do-i-get-a-secret-key-for-flask/34903502) for `SECRET_KEY` and [this](https://mkjwk.org) for `JWT_SECRET_KEY`.
-
-For testing purposes you can use:<br>
-`
-export SECRET_KEY=test JWT_SECRET_KEY=test
 `
 
 ### Launch the Service
 To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
 ```shell script
-docker build --build-arg SECRET_KEY="${SECRET_KEY}" --build-arg JWT_SECRET_KEY="${JWT_SECRET_KEY}" -t muse_as_service .
+docker build -t muse_as_service .
 ```
 **NOTE**: instead of building a docker image, you can pull it from [Docker Hub](https://hub.docker.com/r/dayyass/muse_as_service).
 
@@ -109,11 +98,15 @@ python muse_as_service/database/add_user.py --username {username} --password {pa
 ```
 **NOTE**: no passwords are stored in the database, only their hashes.
 
+To remove the user with `username` run:
+```shell script
+python muse_as_service/database/remove_user.py --username {username}
+```
+
 MUSE as Service has the following endpoints:
 <pre>
 - /login          - POST request with `username` and `password` to get tokens (access and refresh)
-- /logout/access  - POST request to remove access token (access token required)
-- /logout/refresh - POST request to remove refresh token (refresh token required)
+- /logout         - POST request to remove tokens (access and refresh)
 - /token/refresh  - POST request to refresh access token (refresh token required)
 - /tokenize       - GET request for `sentence` tokenization (access token required)
 - /embed          - GET request for `sentence` embedding (access token required)
@@ -130,28 +123,36 @@ port = 5000
 
 sentences = ["This is sentence example.", "This is yet another sentence example."]
 
+# start session
+session = requests.Session()
+
 # login
-response = requests.post(
+response = session.post(
     url=f"http://{ip}:{port}/login",
     json={"username": "admin", "password": "admin"},
 )
-token = response.json()["access_token"]
 
 # tokenizer
-response = requests.get(
+response = session.get(
     url=f"http://{ip}:{port}/tokenize",
     params={"sentence": sentences},
-    headers={"Authorization": f"Bearer {token}"},
 )
 tokenized_sentence = response.json()["tokens"]
 
 # embedder
-response = requests.get(
+response = session.get(
     url=f"http://{ip}:{port}/embed",
     params={"sentence": sentences},
-    headers={"Authorization": f"Bearer {token}"},
 )
 embedding = np.array(response.json()["embedding"])
+
+# logout
+response = session.post(
+    url=f"http://{ip}:{port}/logout",
+)
+
+# close session
+session.close()
 
 # results
 print(tokenized_sentence)  # [
@@ -211,10 +212,6 @@ pre-commit install
 `
 
 Before running tests and code coverage, you need to:
-- set up two environment variables `SECRET_KEY` and `JWT_SECRET_KEY` (for security):<br>
-`
-export SECRET_KEY=test JWT_SECRET_KEY=test
-`
 - run [app.py](https://github.com/dayyass/muse_as_service/blob/main/app.py) in background:<br>
 `
 python app.py &
@@ -230,7 +227,7 @@ To measure [**code coverage**](https://coverage.readthedocs.io) run:<br>
 coverage run -m unittest discover && coverage report -m
 `
 
-**NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with following command:
+**NOTE**: since we launched Flask application in background, we need to stop it after running tests and code coverage with the following command:
 ```shell script
 kill $(ps aux | grep '[a]pp.py' | awk '{print $2}')
 ```

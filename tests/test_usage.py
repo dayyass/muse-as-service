@@ -13,6 +13,9 @@ class TestUsage(flask_testing.TestCase):
     Class for testing usage via requests library and built-in client.
     """
 
+    ip = "localhost"
+    port = 5000
+
     sentences = ["This is sentence example.", "This is yet another sentence example."]
 
     tokenized_sentence_true = [
@@ -37,30 +40,40 @@ class TestUsage(flask_testing.TestCase):
         Testing usage via requests library.
         """
 
-        query_string = {"sentence": self.sentences}
-
         # login
         response = self.client.post(
             "/login",
             json={"username": "admin", "password": "admin"},
         )
-        token = response.json["access_token"]
+
+        self.assertEqual(response.status_code, 200)
 
         # tokenizer
         response = self.client.get(
             "/tokenize",
-            query_string=query_string,
-            headers={"Authorization": f"Bearer {token}"},
+            json={"sentence": self.sentences},
         )
+
+        self.assertEqual(response.status_code, 200)
+
         tokenized_sentence_pred = response.json["tokens"]
 
         # embedder
         response = self.client.get(
             "/embed",
-            query_string=query_string,
-            headers={"Authorization": f"Bearer {token}"},
+            json={"sentence": self.sentences},
         )
+
+        self.assertEqual(response.status_code, 200)
+
         embedding_pred = np.array(response.json["embedding"])
+
+        # logout
+        response = self.client.post(
+            "/logout",
+        )
+
+        self.assertEqual(response.status_code, 200)
 
         # tests
         self.assertListEqual(tokenized_sentence_pred, self.tokenized_sentence_true)
@@ -72,7 +85,7 @@ class TestUsage(flask_testing.TestCase):
         """
 
         # init client
-        client = MUSEClient(ip="localhost", port=5000)
+        client = MUSEClient(ip=self.ip, port=self.port)
 
         # login
         client.login(username="admin", password="admin")

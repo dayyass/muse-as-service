@@ -7,28 +7,36 @@ port = 5000
 
 sentences = ["This is sentence example.", "This is yet another sentence example."]
 
+# start session
+session = requests.Session()
+
 # login
-response = requests.post(
+response = session.post(
     url=f"http://{ip}:{port}/login",
     json={"username": "admin", "password": "admin"},
 )
-token = response.json()["access_token"]
 
 # tokenizer
-response = requests.get(
+response = session.get(
     url=f"http://{ip}:{port}/tokenize",
     params={"sentence": sentences},
-    headers={"Authorization": f"Bearer {token}"},
 )
 tokenized_sentence = response.json()["tokens"]
 
 # embedder
-response = requests.get(
+response = session.get(
     url=f"http://{ip}:{port}/embed",
     params={"sentence": sentences},
-    headers={"Authorization": f"Bearer {token}"},
 )
 embedding = np.array(response.json()["embedding"])
+
+# logout
+response = session.post(
+    url=f"http://{ip}:{port}/logout",
+)
+
+# close session
+session.close()
 
 # results
 print(tokenized_sentence)  # [

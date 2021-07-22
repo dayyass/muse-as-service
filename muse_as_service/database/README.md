@@ -14,3 +14,9 @@ python muse_as_service/database/add_user.py --username {username} --password {pa
 **NOTE**: run it from parent directory `muse_as_service`
 
 **NOTE**: no passwords are stored in the database, only their hashes.
+
+To remove the user with `username` run:
+```
+python muse_as_service/database/remove_user.py --username {username}
+```
+**NOTE**: run it from parent directory `muse_as_service`

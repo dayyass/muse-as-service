@@ -4,6 +4,7 @@ codecov:
 ignore:
   - "muse_as_service/utils.py"
   - "muse_as_service/database/add_user.py"
+  - "muse_as_service/database/remove_user.py"
 
 coverage:
   status:

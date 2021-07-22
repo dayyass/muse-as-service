@@ -20,7 +20,7 @@ PORT = 5000
 # GUNICORN OPTIONS
 
 bind = f"{HOST}:{PORT}"  # The socket to bind
-workers = 4  # The number of worker processes for handling requests
+workers = 1  # The number of worker processes for handling requests
 threads = min(  # The number of worker threads for handling requests
     8, max_workers_and_threads()
 )
