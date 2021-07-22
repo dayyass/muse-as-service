@@ -67,11 +67,11 @@ class TestAuth(flask_testing.TestCase):
 
         return next(
             (
-                cookie
+                cookie.value
                 for cookie in self.client.cookie_jar
                 if cookie.name == "access_token_cookie"
             )
-        ).value
+        )
 
     def test_requests(self) -> None:
         """
