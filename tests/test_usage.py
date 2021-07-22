@@ -1,12 +1,14 @@
 import unittest
 
+import flask_testing
 import numpy as np
-import requests
+from flask import Flask
 
 from muse_as_service import MUSEClient
+from muse_as_service.app import app
 
 
-class TestUsage(unittest.TestCase):
+class TestUsage(flask_testing.TestCase):
     """
     Class for testing usage via requests library and built-in client.
     """
@@ -22,51 +24,56 @@ class TestUsage(unittest.TestCase):
     ]
     embedding_true_shape = (2, 512)
 
+    def create_app(self) -> Flask:
+        """
+        Create Flask app for testing.
+
+        :return: Flask app.
+        :rtype: Flask
+        """
+
+        app.config["TESTING"] = True
+        return app
+
     def test_requests(self) -> None:
         """
         Testing usage via requests library.
         """
 
-        # start session
-        session = requests.Session()
-
         # login
-        response = session.post(
-            f"http://{self.ip}:{self.port}/login",
+        response = self.client.post(
+            "/login",
             json={"username": "admin", "password": "admin"},
         )
 
         self.assertEqual(response.status_code, 200)
 
         # tokenizer
-        response = session.get(
-            f"http://{self.ip}:{self.port}/tokenize",
-            params={"sentence": self.sentences},
+        response = self.client.get(
+            "/tokenize",
+            json={"sentence": self.sentences},
         )
 
         self.assertEqual(response.status_code, 200)
 
-        tokenized_sentence_pred = response.json()["tokens"]
+        tokenized_sentence_pred = response.json["tokens"]
 
         # embedder
-        response = session.get(
-            f"http://{self.ip}:{self.port}/embed",
-            params={"sentence": self.sentences},
+        response = self.client.get(
+            "/embed",
+            json={"sentence": self.sentences},
         )
 
         self.assertEqual(response.status_code, 200)
 
-        embedding_pred = np.array(response.json()["embedding"])
+        embedding_pred = np.array(response.json["embedding"])
 
         # logout
-        response = session.post(
-            url=f"http://{self.ip}:{self.port}/logout",
+        response = self.client.post(
+            "/logout",
         )
 
         self.assertEqual(response.status_code, 200)
-
-        # close session
-        session.close()
 
         # tests
         self.assertListEqual(tokenized_sentence_pred, self.tokenized_sentence_true)

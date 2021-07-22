@@ -1,17 +1,32 @@
 import unittest
+from typing import List
 
+import flask_testing
 import requests
+from flask import Flask
 
 from muse_as_service import MUSEClient
+from muse_as_service.app import app
 
 
-class TestAuth(unittest.TestCase):
+class TestAuth(flask_testing.TestCase):
     """
     Class for testing authorization.
     """
 
     ip = "localhost"
     port = 5000
+
+    def create_app(self) -> Flask:
+        """
+        Create Flask app for testing.
+
+        :return: Flask app.
+        :rtype: Flask
+        """
+
+        app.config["TESTING"] = True
+        return app
 
     def exception_block(self, client: MUSEClient, method_name: str, **kwargs) -> None:
         """
@@ -32,54 +47,81 @@ class TestAuth(unittest.TestCase):
         except Exception:
             self.assertTrue(False)
 
+    def _get_cookies_names(self) -> List[str]:
+        """
+        Helper function to get cookies names.
+
+        :return: cookies names.
+        :rtype: List[str]
+        """
+
+        return [cookie.name for cookie in self.client.cookie_jar]
+
+    def _get_access_token_cookie(self) -> str:
+        """
+        Helper function to get access_token_cookie.
+
+        :return: access_token_cookie.
+        :rtype: str
+        """
+
+        return next(
+            (
+                cookie
+                for cookie in self.client.cookie_jar
+                if cookie.name == "access_token_cookie"
+            )
+        ).value
+
     def test_requests(self) -> None:
         """
         Testing authorization via requests library.
         """
 
-        # start session
-        session = requests.Session()
+        cookies = self._get_cookies_names()
 
-        self.assertTrue("access_token_cookie" not in session.cookies)
-        self.assertTrue("refresh_token_cookie" not in session.cookies)
+        self.assertTrue("access_token_cookie" not in cookies)
+        self.assertTrue("refresh_token_cookie" not in cookies)
 
         # login
-        response = session.post(
-            url=f"http://{self.ip}:{self.port}/login",
+        response = self.client.post(
+            "/login",
             json={"username": "admin", "password": "admin"},
         )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(session.cookies, requests.cookies.RequestsCookieJar)
-        self.assertTrue("access_token_cookie" in session.cookies)
-        self.assertTrue("refresh_token_cookie" in session.cookies)
+        cookies = self._get_cookies_names()
 
-        access_token = session.cookies["access_token_cookie"]
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("access_token_cookie" in cookies)
+        self.assertTrue("refresh_token_cookie" in cookies)
+
+        access_token = self._get_access_token_cookie()
 
         # token refresh
-        response = session.post(
-            url=f"http://{self.ip}:{self.port}/token/refresh",
+        response = self.client.post(
+            "/token/refresh",
         )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("access_token_cookie" in session.cookies)
-        self.assertTrue("refresh_token_cookie" in session.cookies)
+        cookies = self._get_cookies_names()
 
-        new_access_token = session.cookies["access_token_cookie"]
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("access_token_cookie" in cookies)
+        self.assertTrue("refresh_token_cookie" in cookies)
+
+        new_access_token = self._get_access_token_cookie()
 
         self.assertNotEqual(access_token, new_access_token)
 
         # logout access token
-        response = session.post(
-            url=f"http://{self.ip}:{self.port}/logout",
+        response = self.client.post(
+            "/logout",
         )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("access_token_cookie" not in session.cookies)
-        self.assertTrue("refresh_token_cookie" not in session.cookies)
+        cookies = self._get_cookies_names()
 
-        # close session
-        session.close()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("access_token_cookie" not in cookies)
+        self.assertTrue("refresh_token_cookie" not in cookies)
 
     def test_client(self) -> None:
         """
@@ -100,32 +142,26 @@ class TestAuth(unittest.TestCase):
         Testing 401 HTTP error handler via requests library.
         """
 
-        # start session
-        session = requests.Session()
-
         # logout
-        response_logout_before_login = session.post(
-            url=f"http://{self.ip}:{self.port}/logout",
+        response_logout_before_login = self.client.post(
+            "/logout",
         )
 
         # login
-        response_wrong_password = session.post(
-            url=f"http://{self.ip}:{self.port}/login",
+        response_wrong_password = self.client.post(
+            "/login",
             json={"username": "admin", "password": "password"},
         )
 
-        response_wrong_username = session.post(
-            url=f"http://{self.ip}:{self.port}/login",
+        response_wrong_username = self.client.post(
+            "/login",
             json={"username": "username", "password": "admin"},
         )
 
-        response_wrong_username_and_password = session.post(
-            url=f"http://{self.ip}:{self.port}/login",
+        response_wrong_username_and_password = self.client.post(
+            "/login",
             json={"username": "username", "password": "password"},
         )
-
-        # close session
-        session.close()
 
         # tests
         self.assertEqual(response_logout_before_login.status_code, 200)
