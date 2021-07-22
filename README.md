@@ -105,11 +105,11 @@ python muse_as_service/database/remove_user.py --username {username}
 
 MUSE as Service has the following endpoints:
 <pre>
-- /login          - POST request with `username` and `password` to get tokens (access and refresh)
-- /logout         - POST request to remove tokens (access and refresh)
-- /token/refresh  - POST request to refresh access token (refresh token required)
-- /tokenize       - GET request for `sentence` tokenization (access token required)
-- /embed          - GET request for `sentence` embedding (access token required)
+- /login         - POST request with `username` and `password` to get tokens (access and refresh)
+- /logout        - POST request to remove tokens (access and refresh)
+- /token/refresh - POST request to refresh access token (refresh token required)
+- /tokenize      - GET request for `sentence` tokenization (access token required)
+- /embed         - GET request for `sentence` embedding (access token required)
 </pre>
 
 You can use python **requests** package to work with HTTP requests:
@@ -166,10 +166,10 @@ However it is better to use built-in client **MUSEClient** for sentence tokeniza
 
 Instead of using endpoints, listed above, directly, **MUSEClient** provides the following methods to work with:
 <pre>
-- login         - method to login with `username` and `password`
-- logout        - method to logout (login required)
-- tokenize      - method for `sentence` tokenization (login required)
-- embed         - method for `sentence` embedding (login required)
+- login    - method to login with `username` and `password`
+- logout   - method to logout (login required)
+- tokenize - method for `sentence` tokenization (login required)
+- embed    - method for `sentence` embedding (login required)
 </pre>
 
 Usage example:
