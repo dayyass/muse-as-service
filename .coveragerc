@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = muse_as_service
+source = src
 
 [report]
 exclude_lines =
@@ -11,9 +11,9 @@ exclude_lines =
     if __name__ == .__main__.:
 
 omit =
-    muse_as_service/utils.py
-    muse_as_service/database/add_user.py
-    muse_as_service/database/remove_user.py
+    src/muse_as_service/utils.py
+    src/muse_as_service/database/add_user.py
+    src/muse_as_service/database/remove_user.py
 
 show_missing = True
 ignore_errors = False
