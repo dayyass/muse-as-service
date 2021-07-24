@@ -1,9 +1,8 @@
 import sqlite3
-import sys
 from argparse import ArgumentParser
 from contextlib import closing
 
-sys.path.append(".")
+from . import UserModel
 
 
 def get_argparse() -> ArgumentParser:
@@ -16,6 +15,9 @@ def get_argparse() -> ArgumentParser:
     parser.add_argument(
         "--username", type=str, required=True, help="This field cannot be blank"
     )
+    parser.add_argument(
+        "--password", type=str, required=True, help="This field cannot be blank"
+    )
 
     return parser
 
@@ -26,12 +28,12 @@ if __name__ == "__main__":
     parser = get_argparse()
     args = parser.parse_args()
 
-    delete_query = f"DELETE FROM users WHERE username = '{args.username}';"
+    insert_query = f'INSERT INTO users (username, password) VALUES ("{args.username}", "{UserModel.generate_hash(args.password)}");'
 
     # sqlite
     with closing(sqlite3.connect("muse_as_service/database/app.db")) as conn:
         with closing(conn.cursor()) as cursor:
-            cursor.execute(delete_query)
+            cursor.execute(insert_query)
             conn.commit()
 
-    print(f"User '{args.username}' was deleted.")
+    print(f"User '{args.username}' was created.")

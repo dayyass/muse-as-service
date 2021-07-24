@@ -9,7 +9,7 @@ Initially database has only one user with:
 
 To add new user with `username` and `password` run:
 ```
-python muse_as_service/database/add_user.py --username {username} --password {password}
+python src.muse_as_service/database/add_user.py --username {username} --password {password}
 ```
 **NOTE**: run it from parent directory `muse_as_service`
 
@@ -17,6 +17,6 @@ python muse_as_service/database/add_user.py --username {username} --password {pa
 
 To remove the user with `username` run:
 ```
-python muse_as_service/database/remove_user.py --username {username}
+python src.muse_as_service/database/remove_user.py --username {username}
 ```
 **NOTE**: run it from parent directory `muse_as_service`

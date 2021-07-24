@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from passlib.hash import pbkdf2_sha256 as sha256
 
-from muse_as_service.app import db
+from ...muse_as_service.app import db
 
 
 class UserModel(db.Model):

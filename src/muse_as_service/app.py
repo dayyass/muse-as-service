@@ -14,8 +14,8 @@ db: SQLAlchemy = SQLAlchemy(app)
 jwt: JWTManager = JWTManager(app)
 
 
-from muse_as_service.auth import TokenRefresh, UserLogin, UserLogout  # noqa: E402
-from muse_as_service.endpoints import Embedder, Tokenizer  # noqa: E402
+from .auth import TokenRefresh, UserLogin, UserLogout  # noqa: E402
+from .endpoints import Embedder, Tokenizer  # noqa: E402
 
 # auth
 api.add_resource(UserLogin, "/login")
