@@ -1,11 +1,16 @@
 [![tests](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml)
 [![linter](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml)
 [![codecov](https://codecov.io/gh/dayyass/muse_as_service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse_as_service)
+
+[![license](https://img.shields.io/github/license/dayyass/muse_as_service?color=blue)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
 [![python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://github.com/dayyass/muse_as_service#requirements)
-[![license](https://img.shields.io/github/license/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
 [![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/releases/latest)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
+
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-black)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+[![pypi version](https://img.shields.io/pypi/v/muse-as-service)](https://pypi.org/project/muse-as-service/1.1.0/)
+[![pypi downloads](https://img.shields.io/pypi/dm/muse-as-service)](https://pypi.org/project/muse-as-service/1.1.0/)
 
 ### What is MUSE?
 **MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (supports [16 languages](https://github.com/dayyass/muse_as_service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
@@ -163,6 +168,11 @@ print(embedding.shape)  # (2, 512)
 ```
 
 However it is better to use built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides user with a simpler interface.
+
+To install the built-in client run:<br>
+`
+pip install muse-as-service
+`
 
 Instead of using endpoints, listed above, directly, **MUSEClient** provides the following methods to work with:
 <pre>
