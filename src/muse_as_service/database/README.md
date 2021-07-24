@@ -1,7 +1,7 @@
 ### Database
 Since the service is usually running on the server, it is important to restrict access to the service.
 
-For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/muse_as_service/database/app.db).
+For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/src/muse_as_service/database/app.db).
 
 Initially database has only one user with:
 - **username**: "admin"
