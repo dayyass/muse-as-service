@@ -15,6 +15,8 @@ venv
 .idea
 dist
 
+src/muse_as_service.egg-info/
+
 models/*
 !models/README.md
 !models/download_muse.py
