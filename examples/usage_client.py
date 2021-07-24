@@ -1,8 +1,4 @@
-import sys
-
-sys.path.append("../muse_as_service")
-
-from muse_as_service import MUSEClient  # noqa: E402
+from muse_as_service import MUSEClient
 
 # params
 ip = "localhost"
