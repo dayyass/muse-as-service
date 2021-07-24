@@ -4,8 +4,8 @@ import flask_testing
 import numpy as np
 from flask import Flask
 
-from muse_as_service import MUSEClient
-from muse_as_service.app import app
+from src.muse_as_service import MUSEClient
+from src.muse_as_service.app import app
 
 
 class TestUsage(flask_testing.TestCase):
