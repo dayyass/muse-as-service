@@ -6,4 +6,4 @@ To use it, download and unpack the model using next command:
 ```shell script
 python models/download_muse.py
 ```
-**NOTE**: run it from parent directory `muse_as_service`
+**NOTE**: run it from parent directory `muse-as-service`

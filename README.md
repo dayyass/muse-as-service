@@ -1,19 +1,19 @@
-[![tests](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/tests.yml)
-[![linter](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml)
-[![codecov](https://codecov.io/gh/dayyass/muse_as_service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse_as_service)
+[![tests](https://github.com/dayyass/muse-as-service/actions/workflows/tests.yml/badge.svg)](https://github.com/dayyass/muse-as-service/actions/workflows/tests.yml)
+[![linter](https://github.com/dayyass/muse-as-service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse-as-service/actions/workflows/linter.yml)
+[![codecov](https://codecov.io/gh/dayyass/muse-as-service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse-as-service)
 
-[![python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://github.com/dayyass/muse_as_service#requirements)
-[![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/releases/latest)
-[![license](https://img.shields.io/github/license/dayyass/muse_as_service?color=blue)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
+[![python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://github.com/dayyass/muse-as-service#requirements)
+[![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse-as-service)](https://github.com/dayyass/muse-as-service/releases/latest)
+[![license](https://img.shields.io/github/license/dayyass/muse-as-service?color=blue)](https://github.com/dayyass/muse-as-service/blob/main/LICENSE)
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-black)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-black)](https://github.com/dayyass/muse-as-service/blob/main/.pre-commit-config.yaml)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [![pypi version](https://img.shields.io/pypi/v/muse-as-service)](https://pypi.org/project/muse-as-service)
 [![pypi downloads](https://img.shields.io/pypi/dm/muse-as-service)](https://pypi.org/project/muse-as-service)
 
 ### What is MUSE?
-**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (supports [16 languages](https://github.com/dayyass/muse_as_service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
+**MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (supports [16 languages](https://github.com/dayyass/muse-as-service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
 MUSE model encodes sentences into embedding vectors of fixed size.
 
 - MUSE [paper](https://arxiv.org/abs/1907.04307)
@@ -43,11 +43,11 @@ Python >= 3.7
 To install MUSE as Service run:
 ```shell script
 # clone repo (https/ssh)
-git clone https://github.com/dayyass/muse_as_service.git
-# git clone git@github.com:dayyass/muse_as_service.git
+git clone https://github.com/dayyass/muse-as-service.git
+# git clone git@github.com:dayyass/muse-as-service.git
 
 # install dependencies (preferable in venv)
-cd muse_as_service
+cd muse-as-service
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip && pip install -r requirements.txt
@@ -60,7 +60,7 @@ python models/download_muse.py
 `
 
 ### Launch the Service
-To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file run:
+To build a **docker image** with a service parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse-as-service/blob/main/gunicorn.conf.py) file run:
 ```shell script
 docker build -t muse_as_service .
 ```
@@ -70,10 +70,10 @@ To launch the service (either locally or on a server) use a **docker container**
 ```shell script
 docker run -d -p {host_port}:{container_port} --name muse_as_service muse_as_service
 ```
-**NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file.
+**NOTE**: `container_port` should be equal to `port` in [gunicorn.conf.py](https://github.com/dayyass/muse-as-service/blob/main/gunicorn.conf.py) file.
 
 You can also launch the service without docker, but it is preferable to launch the service inside the docker container:
-- **Gunicorn**: `gunicorn --config gunicorn.conf.py app:app` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse_as_service/blob/main/gunicorn.conf.py) file)
+- **Gunicorn**: `gunicorn --config gunicorn.conf.py app:app` (parametrized with [gunicorn.conf.py](https://github.com/dayyass/muse-as-service/blob/main/gunicorn.conf.py) file)
 - **Flask**: `python app.py --host {host} --port {port}` (default `host 0.0.0.0` and `port 5000`)
 
 It is also possible to launch the service using [**systemd**](https://en.wikipedia.org/wiki/Systemd).
@@ -91,7 +91,7 @@ MUSE as Service supports **GPU** inference. To launch the service with GPU suppo
 ### Usage
 Since the service is usually running on server, it is important to restrict access to the service.
 
-For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse_as_service/tree/main/src/muse_as_service/database/app.db).
+For this reason, MUSE as Service uses **token-based authorization** with [JWT](https://jwt.io) for users in sqlite database [app.db](https://github.com/dayyass/muse-as-service/tree/main/src/muse_as_service/database/app.db).
 
 Initially database has only one user with:
 - **username**: "admin"
@@ -222,12 +222,12 @@ pre-commit install
 `
 
 Before running tests and code coverage, you need to:
-- run [app.py](https://github.com/dayyass/muse_as_service/blob/main/app.py) in background:<br>
+- run [app.py](https://github.com/dayyass/muse-as-service/blob/main/app.py) in background:<br>
 `
 python app.py &
 `
 
-To launch [**tests**](https://github.com/dayyass/muse_as_service/tree/main/tests) run:<br>
+To launch [**tests**](https://github.com/dayyass/muse-as-service/tree/main/tests) run:<br>
 `
 python -m unittest discover
 `
@@ -262,12 +262,12 @@ MUSE model supports next languages:
 - Turkish
 
 ### Citation
-If you use **muse_as_service** in a scientific publication, we would appreciate references to the following BibTex entry:
+If you use **muse-as-service** in a scientific publication, we would appreciate references to the following BibTex entry:
 ```bibtex
 @misc{dayyass2021muse,
     author       = {El-Ayyass, Dani},
     title        = {Multilingual Universal Sentence Encoder REST API},
-    howpublished = {\url{https://github.com/dayyass/muse_as_service}},
+    howpublished = {\url{https://github.com/dayyass/muse-as-service}},
     year         = {2021}
 }
 ```
