@@ -26,7 +26,7 @@ if __name__ == "__main__":
     delete_query = f"DELETE FROM users WHERE username = '{args.username}';"
 
     # sqlite
-    with closing(sqlite3.connect("muse_as_service/database/app.db")) as conn:
+    with closing(sqlite3.connect("src/muse_as_service/database/app.db")) as conn:
         with closing(conn.cursor()) as cursor:
             cursor.execute(delete_query)
             conn.commit()
