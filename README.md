@@ -2,9 +2,9 @@
 [![linter](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse_as_service/actions/workflows/linter.yml)
 [![codecov](https://codecov.io/gh/dayyass/muse_as_service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse_as_service)
 
-[![license](https://img.shields.io/github/license/dayyass/muse_as_service?color=blue)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
 [![python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://github.com/dayyass/muse_as_service#requirements)
 [![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse_as_service)](https://github.com/dayyass/muse_as_service/releases/latest)
+[![license](https://img.shields.io/github/license/dayyass/muse_as_service?color=blue)](https://github.com/dayyass/muse_as_service/blob/main/LICENSE)
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-black)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
