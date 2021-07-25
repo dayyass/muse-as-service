@@ -2,9 +2,9 @@ codecov:
   require_ci_to_pass: yes
 
 ignore:
-  - "muse_as_service/utils.py"
-  - "muse_as_service/database/add_user.py"
-  - "muse_as_service/database/remove_user.py"
+  - "src/muse_as_service/utils.py"
+  - "src/muse_as_service/database/add_user.py"
+  - "src/muse_as_service/database/remove_user.py"
 
 coverage:
   status:
@@ -12,6 +12,6 @@ coverage:
       default: false
       source:
         paths:
-          - "muse_as_service/"
+          - "src/"
         target: 90%
     patch: off

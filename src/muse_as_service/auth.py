@@ -10,7 +10,7 @@ from flask_jwt_extended import (
 )
 from flask_restful import Resource, reqparse
 
-from muse_as_service.database.database import UserModel
+from .database import UserModel
 
 
 def unauthorized() -> Response:

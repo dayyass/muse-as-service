@@ -1,7 +1,7 @@
 import unittest
 
-from muse_as_service.app import app  # noqa: F401
-from muse_as_service.database.database import UserModel
+from src.muse_as_service.app import app  # noqa: F401
+from src.muse_as_service.database import UserModel
 
 
 class TestDatabase(unittest.TestCase):

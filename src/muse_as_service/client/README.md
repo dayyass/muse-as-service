@@ -60,6 +60,11 @@ print(embedding.shape)  # (2, 512)
 
 However it is better to use built-in client **MUSEClient** for sentence tokenization and embedding, that wraps the functionality of the python **requests** package and provides user with a simpler interface.
 
+To install the built-in client run:<br>
+`
+pip install muse-as-service
+`
+
 Instead of using endpoints, listed above, directly, **MUSEClient** provides the following methods to work with:
 <pre>
 - login         - method to login with `username` and `password`

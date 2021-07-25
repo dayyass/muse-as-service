@@ -1,5 +1,5 @@
-from muse_as_service.app import app
-from muse_as_service.utils import get_argparse
+from src.muse_as_service.app import app
+from src.muse_as_service.utils import get_argparse
 
 if __name__ == "__main__":
 

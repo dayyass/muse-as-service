@@ -13,7 +13,10 @@
 
 venv
 .idea
+dist
 .git
+
+src/muse_as_service.egg-info/
 
 models/*
 !models/README.md
