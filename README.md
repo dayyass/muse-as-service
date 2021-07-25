@@ -9,8 +9,8 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-black)](https://github.com/dayyass/muse_as_service/blob/main/.pre-commit-config.yaml)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[![pypi version](https://img.shields.io/pypi/v/muse-as-service)](https://pypi.org/project/muse-as-service/1.1.0/)
-[![pypi downloads](https://img.shields.io/pypi/dm/muse-as-service)](https://pypi.org/project/muse-as-service/1.1.0/)
+[![pypi version](https://img.shields.io/pypi/v/muse-as-service)](https://pypi.org/project/muse-as-service)
+[![pypi downloads](https://img.shields.io/pypi/dm/muse-as-service)](https://pypi.org/project/muse-as-service)
 
 ### What is MUSE?
 **MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (supports [16 languages](https://github.com/dayyass/muse_as_service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
