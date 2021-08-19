@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from passlib.hash import pbkdf2_sha256 as sha256
 
 from ...muse_as_service.app import db
@@ -43,7 +41,7 @@ class UserModel(db.Model):
         return sha256.verify(password, hash)
 
     @classmethod
-    def find_by_username(cls, username: str) -> UserModel:
+    def find_by_username(cls, username: str):
         """
         Find user in database given username.
 
