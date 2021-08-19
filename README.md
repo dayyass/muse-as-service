@@ -2,7 +2,7 @@
 [![linter](https://github.com/dayyass/muse-as-service/actions/workflows/linter.yml/badge.svg)](https://github.com/dayyass/muse-as-service/actions/workflows/linter.yml)
 [![codecov](https://codecov.io/gh/dayyass/muse-as-service/branch/main/graph/badge.svg?token=RRSTQY2R2Y)](https://codecov.io/gh/dayyass/muse-as-service)
 
-[![python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://github.com/dayyass/muse-as-service#requirements)
+[![python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://github.com/dayyass/muse-as-service#requirements)
 [![release (latest by date)](https://img.shields.io/github/v/release/dayyass/muse-as-service)](https://github.com/dayyass/muse-as-service/releases/latest)
 [![license](https://img.shields.io/github/license/dayyass/muse-as-service?color=blue)](https://github.com/dayyass/muse-as-service/blob/main/LICENSE)
 
@@ -37,7 +37,7 @@ For efficient memory usage when working with MUSE model on several projects (sev
 This is what **MUSE as Service** is made for! ❤️
 
 ### Requirements
-Python >= 3.7
+Python >= 3.6
 
 ### Installation
 To install MUSE as Service run:
