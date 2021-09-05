@@ -12,6 +12,9 @@
 [![pypi version](https://img.shields.io/pypi/v/muse-as-service)](https://pypi.org/project/muse-as-service)
 [![pypi downloads](https://img.shields.io/pypi/dm/muse-as-service)](https://pypi.org/project/muse-as-service)
 
+My public talk about this project at Sberloga:<br>
+[**Web-service for Sentence Embeddings**](https://youtu.be/ZayiaA84oXg)
+
 ### What is MUSE?
 **MUSE** stands for Multilingual Universal Sentence Encoder - multilingual extension (supports [16 languages](https://github.com/dayyass/muse-as-service#muse-supported-languages)) of Universal Sentence Encoder (USE).<br>
 MUSE model encodes sentences into embedding vectors of fixed size.
